@@ -1,5 +1,9 @@
 // Express
 const express = require('express');
+// cors
+const cors = require('cors');
+// Conexion a la BD archivo database/config
+const { mongoDbConnection } = require('../database/config');
 
 // Server Class
 class Server{
@@ -14,6 +18,8 @@ class Server{
         this.usuariosPath = '/api/usuarios';
 
 
+        // conexion a la BD
+        this.conectarBD();
         // middlewares
         this.middlewares();
         // routes()
@@ -21,10 +27,18 @@ class Server{
 
     }
     // metodos
+    // conexion a la BD
+    async conectarBD() {
+        await mongoDbConnection();
+    }
     // middlewares
     middlewares() {
+        // CORS
+        this.app.use( cors() );
         // archivos publicos
         this.app.use( express.static('public'));
+        // leer y parsear el JSON
+        this.app.use( express.json() );
     }
     // routers
     routes() {
