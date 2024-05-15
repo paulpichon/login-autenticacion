@@ -2,7 +2,7 @@
 const { Schema, model } = require('mongoose');
 
 // Schema
-const UsuarioSchema = Schema({
+const UsuariosSchema = Schema({
     // nombre
     nombre_completo: {
         nombre: {
@@ -27,7 +27,7 @@ const UsuarioSchema = Schema({
     lugar_radicacion: {
         nombre_estado: {
             type: String,
-            default: ['TLAXCALA']
+            default: 'TLAXCALA'
         },
         id_municipio: {
             type: Number,
@@ -76,4 +76,4 @@ const UsuarioSchema = Schema({
     }
 });
 // exports
-module.exports = model('Usuario', UsuarioSchema);
+module.exports = model('Usuario', UsuariosSchema);
