@@ -1,0 +1,79 @@
+// Modelo Usuario
+const { Schema, model } = require('mongoose');
+
+// Schema
+const UsuarioSchema = Schema({
+    // nombre
+    nombre_completo: {
+        nombre: {
+            type: String,
+            required: [true, 'El nombre es obligatorio']
+        },
+        apellido: String,
+    },
+    // correo
+    correo: {
+        type: String,
+        required: [true, 'El correo es obligatorio'],
+        unique: true
+    },
+    // password
+    password: {
+        type: String,
+        required: [true, 'El password es obligatorio'],
+    },
+    // telefono *(verificar si es necesario el telefono)
+    // Estado y id_municipio(donde vive)
+    lugar_radicacion: {
+        nombre_estado: {
+            type: String,
+            default: ['TLAXCALA']
+        },
+        id_municipio: {
+            type: Number,
+            default: undefined,
+        },
+        nombre_municipio: {
+            type: String,
+            default: undefined
+        },
+    },
+    // genero (hombre, mujer, prefiero no decir)
+    genero: {
+        type: String,
+    },
+    // fecha_nacimiento
+    fecha_nacimiento: {
+        type: Date
+    },
+    // imagen_perfil
+    imagen_perfil: {
+        type: String
+    },
+    // estatus(no activada = 0, cuenta activada = 1, infringio alguna norma de la comunidad = 2)
+    estatus: {
+        type: Number,
+        default: 0, 
+        enum: [0, 1, 2]
+    },
+    // hash_verificacion( para validar la cuenta)
+    hash_verificacion: {
+        type: String,
+    },
+    // intentos( de entrar a la cuenta)
+    intentos_login: {
+        type: Number,
+        default: 0
+    },
+    // fecha_registro
+    fecha_registro: {
+        type: Date, 
+        default: Date.now
+    },
+    // fecha_actualizacion
+    fecha_actualizacion: {
+        type: Date, 
+    }
+});
+// exports
+module.exports = model('Usuario', UsuarioSchema);
