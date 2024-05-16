@@ -56,6 +56,11 @@ const UsuariosSchema = Schema({
         default: 0, 
         enum: [0, 1, 2]
     },
+    // google: por defecto esta en false, si esta en true quiere decir que creo una cuenta con GOOGLE SIGNIN
+    google: {
+        type: Boolean,
+        default: false
+    },
     // hash_verificacion( para validar la cuenta)
     hash_verificacion: {
         type: String,
