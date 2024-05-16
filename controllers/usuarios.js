@@ -1,6 +1,8 @@
 // controllers usuarios
 // Modelo Usuario
 const Usuario = require("../models/usuario");
+// bcryptjs
+const bcryptjs = require('bcryptjs');
 
 //GET 
 const usuariosGet = (req, res) => {
@@ -15,6 +17,9 @@ const usuariosPost = async (req, res) => {
     const { nombre_completo, correo, password } = req.body;
     // crear el usuario
     const usuario = await Usuario({ nombre_completo, correo, password });
+    // encriptar la contraseña 
+    const salt = bcryptjs.genSaltSync(10);
+    usuario.password = bcryptjs.hashSync(password, salt);
     // Guardar el usuario en la BD
     await usuario.save();
     // RESPUESTA
