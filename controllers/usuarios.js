@@ -5,6 +5,8 @@ const Usuario = require("../models/usuario");
 const bcryptjs = require('bcryptjs');
 // Crear el JWT
 const { crearJWT } = require("../helpers/crear-jwt");
+// Envio de correo para verificar cuenta
+const { envioCorreoVerificacion } = require("../email/envio-correo-verificacion");
 
 //GET 
 const usuariosGet = (req, res) => {
@@ -26,6 +28,9 @@ const usuariosPost = async (req, res) => {
     await usuario.save();
     // despues de guardar el usuario en al BD, se debe crear el TOKEN
     const token = await crearJWT( usuario._id, usuario.correo );
+    // enviar el correo con el link para verificar la cuenta 
+    await envioCorreoVerificacion( usuario.nombre, usuario.correo );    
+
     // RESPUESTA
     res.json({
         status: 200,
