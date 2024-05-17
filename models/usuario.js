@@ -61,9 +61,10 @@ const UsuariosSchema = Schema({
         type: Boolean,
         default: false
     },
-    // hash_verificacion( para validar la cuenta)
-    hash_verificacion: {
-        type: String,
+    // email_validated( para validar la cuenta true or false)
+    email_validated: {
+        type: Boolean,
+        default: false
     },
     // intentos( de entrar a la cuenta)
     intentos_login: {
