@@ -80,5 +80,14 @@ const UsuariosSchema = Schema({
         type: Date, 
     }
 });
+// cambiar visualmente _id por uuid
+UsuariosSchema.methods.toJSON = function() {
+    // destructurar las propiedades que queremos cambiar o quitar de la respuesta
+    const { _id, password, __v, ...usuario } = this.toObject();
+    // cambiar _id por UUID
+    usuario.uid = _id;
+    // devolver el objeto
+    return usuario;
+}
 // exports
 module.exports = model('Usuario', UsuariosSchema);

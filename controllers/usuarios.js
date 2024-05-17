@@ -3,6 +3,8 @@
 const Usuario = require("../models/usuario");
 // bcryptjs
 const bcryptjs = require('bcryptjs');
+// Crear el JWT
+const { crearJWT } = require("../helpers/crear-jwt");
 
 //GET 
 const usuariosGet = (req, res) => {
@@ -22,10 +24,13 @@ const usuariosPost = async (req, res) => {
     usuario.password = bcryptjs.hashSync(password, salt);
     // Guardar el usuario en la BD
     await usuario.save();
+    // despues de guardar el usuario en al BD, se debe crear el TOKEN
+    const token = await crearJWT( usuario._id, usuario.correo );
     // RESPUESTA
     res.json({
         status: 200,
-        usuario
+        usuario,
+        token
     });
 }
 // PUT
