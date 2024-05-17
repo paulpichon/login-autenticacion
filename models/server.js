@@ -16,6 +16,8 @@ class Server{
         this.port = process.env.PORT ?? 3000;
         // Path usuarios
         this.usuariosPath = '/api/usuarios';
+        // path auth
+        this.authPath = '/api/auth';
 
 
         // conexion a la BD
@@ -42,7 +44,10 @@ class Server{
     }
     // routers
     routes() {
+        // path usuarios
         this.app.use(this.usuariosPath, require('../routes/usuarios'));
+        // path auth
+        this.app.use(this.authPath, require('../routes/auth'));
     }
     // listen
     listen() {

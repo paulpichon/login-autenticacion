@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken');
 const JWT_SEED = process.env.JWT_SEED;
 
 // Crear el JWT
-const crearJWT = async ( uid = '', correo = '' ) => {
+const crearJWT = async ( payload ) => {
     
     return new Promise( (resolve, reject ) => {
 
         // payload 
-        const payload = { uid, correo };
+        // const payload = { uid, correo };
 
         jwt.sign(payload, JWT_SEED, { 
             expiresIn: '2h'
