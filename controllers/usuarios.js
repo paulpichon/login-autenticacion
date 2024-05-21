@@ -6,7 +6,7 @@ const bcryptjs = require('bcryptjs');
 // Crear el JWT
 const { crearJWT } = require("../helpers/crear-jwt");
 // Envio de correo para verificar cuenta
-const { envioCorreoVerificacion } = require("../email/envio-correo-verificacion");
+const { envioCorreoVerificacion } = require("../email/servicios-autenticacion-correo");
 
 //GET 
 const usuariosGet = (req, res) => {

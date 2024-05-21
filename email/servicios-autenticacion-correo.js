@@ -2,6 +2,10 @@
 const nodemailer = require("nodemailer");
 // crear JWT
 const { crearJWT } = require("../helpers/crear-jwt");
+// validar el JWT
+const { validarJWT } = require("../helpers/validar-jwt");
+// modelo de usuario
+const Usuario = require("../models/usuario");
 
 // envio de correo de verificacion de cuenta
 const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
@@ -148,7 +152,38 @@ const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
     // Para verificar por consola que se envio el mensaje
     // console.log("Message sent: %s", info.messageId);
 }
+
+// Servicio para poder verificar el EMAIL del usuario
+const verificarCorreoEnviado = async ( token = '') => {
+
+    // payload
+    const payload = await validarJWT( token );
+    // si no hay payload
+    if ( !payload ) throw new Error('Unauthorized: Token invalido');
+
+    // desestructuramos payload
+    const { correo } = payload;
+    // en caso de que no venga el correo en el token 
+    if ( !correo ) throw new Error('Internal Server Error: Correo no esta en el token');
+
+    // buscamos al usuario por medio del correo
+    const usuario = await Usuario.findOne({ correo });
+    // verificar si existe el usuario
+    if ( !usuario ) throw new Error('Internal Server Error: correo no existe');
+
+    // si todo sale bien
+    usuario.email_validated = true;
+    // guardar el cambiuo
+    await usuario.save();
+
+    return true;
+
+}
+
+
+
 // exports
 module.exports = {
-    envioCorreoVerificacion
+    envioCorreoVerificacion,
+    verificarCorreoEnviado
 }
