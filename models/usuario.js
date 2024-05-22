@@ -51,6 +51,7 @@ const UsuariosSchema = Schema({
         type: String
     },
     // estatus(no activada = 0, cuenta activada = 1, infringio alguna norma de la comunidad = 2)
+    // con este campo podemos cambiar el estatus del usuario
     estatus: {
         type: Number,
         default: 0, 
@@ -62,6 +63,7 @@ const UsuariosSchema = Schema({
         default: false
     },
     // email_validated( para validar la cuenta true or false)
+    // con este campo se activa la cuenta del usuario
     email_validated: {
         type: Boolean,
         default: false

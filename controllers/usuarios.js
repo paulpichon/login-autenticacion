@@ -28,9 +28,13 @@ const usuariosPost = async (req, res) => {
     await usuario.save();
     // despues de guardar el usuario en al BD, se debe crear el TOKEN
     const token = await crearJWT({ uid: usuario._id, correo: usuario.correo} );
-    // enviar el correo con el link para verificar la cuenta 
-    await envioCorreoVerificacion( usuario.nombre, usuario.correo );    
 
+    // si esta en DESARROLLO SEND_EMAIL sera igual a FALSE, si esta en PRODUCCION sera TRUE
+    // enviar el correo con el link para verificar la cuenta 
+    if ( !process.env.SEND_EMAIL ) {
+        // si es true se manda el email de lo contrario no se envia
+        await envioCorreoVerificacion( usuario.nombre, usuario.correo );        
+    }
     // RESPUESTA
     res.json({
         status: 200,

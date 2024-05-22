@@ -32,7 +32,7 @@ const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
     if ( !token ) throw new Error('No se pudo generar el token');
     // LINK
     const link = `${ process.env.WEBSEVICE_URL }/auth/verificar-correo/${ token }`;
-
+    
     // send mail with defined transport object
     const info = await transporter.sendMail({
         from: `"Tlaxcala En Imágenes" <${process.env.MAILER_AUTH_USER}>`, // sender address
