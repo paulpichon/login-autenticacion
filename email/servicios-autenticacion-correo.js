@@ -12,17 +12,12 @@ const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
     // transporte
     const transporter = nodemailer.createTransport({
       host: process.env.MAILER_HOST,
-      name: 'ns46.hostgator.mx',
       port: process.env.MAILER_PORT,
       secure: process.env.MAILER_SECURE, // Use `true` for port 465, `false` for all other ports
       auth: {
         user: process.env.MAILER_AUTH_USER,
         pass: process.env.MAILER_AUTH_PASSWORD,
       },
-      // tls: {
-      //   // do not fail on invalid certs
-      //   servername: 'mx46',
-      // },
     });
     // crear el LINK con el token de verificacion
     // token
@@ -153,31 +148,31 @@ const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
     // console.log("Message sent: %s", info.messageId);
 }
 
-// Servicio para poder verificar el EMAIL del usuario
+// Servicio para poder verificar el CUENTA del usuario
 const verificarCorreoEnviado = async ( token = '') => {
 
     // payload
     const payload = await validarJWT( token );
     // si no hay payload
-    if ( !payload ) throw new Error('Unauthorized: Token invalido');
+    if ( !payload ) throw new Error('Unauthorized: Token invalido o ha expirado.');
 
     // desestructuramos payload
     const { correo } = payload;
-    // en caso de que no venga el correo en el token 
+    // en caso de que no venga el correo en el token, pero esto no deberia de fallar!! y si falla es un poblema del backend
     if ( !correo ) throw new Error('Internal Server Error: Correo no esta en el token');
 
     // buscamos al usuario por medio del correo
     const usuario = await Usuario.findOne({ correo });
     // verificar si existe el usuario
+    // esto tampoco deberia de fallar!!! y si falla es un poblema del backend
     if ( !usuario ) throw new Error('Internal Server Error: correo no existe');
 
     // si todo sale bien
     usuario.email_validated = true;
     // guardar el cambiuo
     await usuario.save();
-
+    // no hace falta poner el return
     return true;
-
 }
 
 

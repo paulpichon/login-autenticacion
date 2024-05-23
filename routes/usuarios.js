@@ -29,7 +29,7 @@ router.post('/', [
         // validar que el correo no este repetido
         check('correo').custom( validarCorreoUsuario ),
         // validar el password
-        check('password', 'El password debe tener minimo 6 caracteres').trim().isLength({ min: 6  }),
+        check('password', 'El password es obligatorio: debe tener al menos 6 caracteres').trim().isLength({ min: 6  }),
         // validar el estatus sea un numero
         check('estatus', 'El estatus debe ser de tipo numerico').optional().trim().isNumeric(),
         // validar los intentos del usuario de entrar a su cuenta
