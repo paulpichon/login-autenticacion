@@ -76,7 +76,7 @@ const UsuariosSchema = Schema({
     // fecha_registro
     fecha_registro: {
         type: Date, 
-        default: Date.now()
+        default: Date.now
     },
     // fecha_actualizacion
     fecha_actualizacion: {
