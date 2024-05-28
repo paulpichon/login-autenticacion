@@ -33,7 +33,7 @@ const usuariosPost = async (req, res) => {
     // enviar el correo con el link para verificar la cuenta 
     if ( process.env.SEND_EMAIL !== false ) {
         // si es true se manda el email de lo contrario no se envia
-        await envioCorreoVerificacion( usuario.nombre, usuario.correo );        
+        // await envioCorreoVerificacion( usuario.nombre, usuario.correo );        
     }
     // RESPUESTA
     res.json({
