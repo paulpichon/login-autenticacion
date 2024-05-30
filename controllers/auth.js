@@ -48,13 +48,26 @@ const login = async ( req, res ) => {
         });
         // validar que la contraseña sea correcta
         const validarPass = bcryptjs.compareSync(password, usuario.password);
-        if ( !validarPass ) return res.status( 401 ).json({
-            msg: 'Correo/contraseña invalidos - contraseña incorrecta'
-        });
+        if ( !validarPass ) {
+             // si la contraseña es incorrecta ademas de mostrar una alerta debemos actualizar el campo INTENTOS_LOGIN +1
+            //  contador 
+            let contador = Number( usuario.intentos_login );
+            // incrementar en 1
+            contador++;
+            // actualizar la BD
+            await Usuario.findByIdAndUpdate(usuario.id, { intentos_login: contador }, {});
+            // mostrar el error
+            return res.status( 401 ).json({
+                msg: 'Correo/contraseña invalidos - contraseña incorrecta'
+            });
+        }
         // crear el TOKEN de acceso
         // con 15 minutos para expirar
         // mandamos el id del usuario como un objeto y el tiempo de expiracion del token como segundo argumento
         const token = await crearJWT( {id: usuario.id }, 90000);
+        // actualizar intentos_login a 0 ya que paso los filtros
+        // actualizar la BD
+        await Usuario.findByIdAndUpdate(usuario.id, { intentos_login: 0 }, {});
         // respuesta
         return res.json({
             usuario,
