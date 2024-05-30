@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const JWT_SEED = process.env.JWT_SEED;
 
 // Crear el JWT
-const crearJWT = async ( payload ) => {
+// expiresIn, ya que vamos a utilizar diferentes tipos expiracion del token a lo largo del programa
+const crearJWT = async ( payload, expiresIn = '1h' ) => {
     // regresamos una promesa con el token generado
     return new Promise( (resolve, reject ) => {
 
@@ -13,7 +14,7 @@ const crearJWT = async ( payload ) => {
         // const payload = { uid, correo };
 
         jwt.sign(payload, JWT_SEED, { 
-            expiresIn:  '1h' //el token expira en 1 hora verificar el tiempo con el cron job
+            expiresIn:  expiresIn //el token expira en 1 hora verificar el tiempo con el cron job
         }, function(err, token) {
             if ( err ) {
                 reject('El token no se pudo generar');
