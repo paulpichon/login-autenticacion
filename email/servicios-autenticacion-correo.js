@@ -6,6 +6,8 @@ const { crearJWT } = require("../helpers/crear-jwt");
 const { validarJWT } = require("../helpers/validar-jwt");
 // modelo de usuario
 const Usuario = require("../models/usuario");
+// Custom Errors
+const { CustomError } = require("../errors/custom.errors");
 
 // envio de correo de verificacion de cuenta
 const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
@@ -24,7 +26,7 @@ const envioCorreoVerificacion = async ( nombre = '', correo = '' ) => {
     // Para crear el token solo enviaremos como payload el correo
     const token = await crearJWT({ correo });
     // si no se generar el token mostramos un error
-    if ( !token ) throw new Error('No se pudo generar el token');
+    if ( !token ) throw CustomError.internalServer('No se pudo generar el token');
     // LINK
     const link = `${ process.env.WEBSEVICE_URL }/auth/verificar-correo/${ token }`;
     
@@ -154,28 +156,28 @@ const verificarCorreoEnviado = async ( token = '') => {
     // payload
     const payload = await validarJWT( token );
     // si no hay payload
-    if ( !payload ) throw new Error('Unauthorized: Token invalido o ha expirado.');
+    // if ( !payload ) throw new Error('Unauthorized: Token invalido o ha expirado.');
+    
+    if ( !payload ) throw CustomError.unauthorized('Unauthorized: Token invalido o ha expirado.');
 
     // desestructuramos payload
     const { correo } = payload;
     // en caso de que no venga el correo en el token, pero esto no deberia de fallar!! y si falla es un poblema del backend
-    if ( !correo ) throw new Error('Internal Server Error: Correo no esta en el token');
+    // if ( !correo ) throw new Error('Internal Server Error: Correo no esta en el token');
+    if ( !correo ) throw CustomError.internalServer('Internal Server Error: Correo no esta en el token');
 
     // buscamos al usuario por medio del correo
     const usuario = await Usuario.findOne({ correo });
     // verificar si existe el usuario
     // esto tampoco deberia de fallar!!! y si falla es un poblema del backend
-    if ( !usuario ) throw new Error('Internal Server Error: correo no existe');
-
+    if ( !usuario ) throw CustomError.internalServer('Internal Server Error: correo no existe');
     // si todo sale bien
     usuario.email_validated = true;
-    // guardar el cambiuo
+    // guardar el cambio
     await usuario.save();
     // no hace falta poner el return
     return true;
 }
-
-
 
 // exports
 module.exports = {

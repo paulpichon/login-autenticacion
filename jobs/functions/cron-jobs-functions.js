@@ -22,8 +22,8 @@ const eliminarRegistrosCuentasNoVerificadas = async () => {
             // diferencia de tiempo en minutos
             const difEnMinutos = difEnMilisegundos / (1000 * 60);
             console.log(difEnMinutos, usuario._id);
-            // validar si difEnMinutos es mayor a 2 horas
-            if (difEnMinutos >= 60) {
+            // validar si difEnMinutos es mayor a 1 hora
+            if (difEnMinutos >= 61) {
                 // En caso de que difEnMinutos sea mayor a 2 horas se eliminan los registros con email_validated:false
                 console.log(`Registro con ID ${usuario._id} tiene más de 15 minutos desde que creo su cuenta.`);
                 // Se elimina el documento fisicamente de la BD
