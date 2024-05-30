@@ -172,7 +172,10 @@ const verificarCorreoEnviado = async ( token = '') => {
     // esto tampoco deberia de fallar!!! y si falla es un poblema del backend
     if ( !usuario ) throw CustomError.internalServer('Internal Server Error: correo no existe');
     // si todo sale bien
+    // cambiamos email_validated de false a true
     usuario.email_validated = true;
+    // cambiamos estatus de 0 a 1 = cuenta activada
+    usuario.estatus = 1;
     // guardar el cambio
     await usuario.save();
     // no hace falta poner el return
