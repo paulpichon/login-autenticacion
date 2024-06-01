@@ -5,7 +5,14 @@ const Usuario = require("../models/usuario");
 const bcryptjs = require('bcryptjs');
 // verificar el correo enviado al usuario
 const { verificarCorreoEnviado } = require("../email/servicios-autenticacion-correo");
+// Crear el JWT
 const { crearJWT } = require("../helpers/crear-jwt");
+// Envio de correo con link para reestablcer la contraseña
+// reestablecer password
+const { envioCorreoLinkReestablecerPassword, 
+        reestablecerPasswordUsuario } = require("../email/servicios-correo-reestablecer-password");
+// validar el token
+const { validarJWT } = require("../helpers/validar-jwt");
 
 
 
@@ -80,8 +87,58 @@ const login = async ( req, res ) => {
         return res.status(500).json(error.message)
     }
 }
+// Envio de correo con link para reestablcer la contraseña
+const envioCorreoReestablecerPassword = async ( req, res ) => {
+    // body
+    const { correo } = req.body;
+    // buscar el correo en la BD
+    const usuario = await Usuario.findOne({ correo });
+    // si no existe
+    if ( !usuario ) {
+        return res.status( 404 ).json({
+            msg: 'El correo no existe en la BD'
+        });
+    }
+    // verificar que email_validated sea true
+    if ( !usuario.email_validated ) {
+        return res.status( 401 ).json({
+            msg: 'El usuario no ha verificado su cuenta'
+        });
+    }
+    // llamar la funcion para enviar el correo
+    await envioCorreoLinkReestablecerPassword( usuario.nombre, correo );
+
+    // respuesta
+    res.json({
+        msg: 'Correo enviado con el link para reestablecer password'
+    });
+
+}
+// Reestablecer contraseña del usuario
+const reestablecerPassword = async ( req, res ) => {
+    // token
+    const { token } = req.params;
+    // password
+    const { password } = req.body;
+    // validar el token y actualizar la contraseña
+    reestablecerPasswordUsuario( token, password )
+        .then( () => {
+            res.json('Password reestablecido')
+        })
+            // .catch( error => console.log( error, res ));
+            .catch( error => {
+                // Esto muestra un error en la consola, debemos mejorar este manjeo del error
+                // si no se pudo resolver la verificacion de la cuenta mostramos un mensaje
+                // console.log( error, res )
+                console.log( error )
+                // return res.status(500).json(error.message)
+                // res.json('Token invalido o ha expirado')
+            });
+}
 // exports
 module.exports = {
     verificarCorreo,
-    login
+    login,
+    envioCorreoReestablecerPassword,
+    reestablecerPassword,
 }

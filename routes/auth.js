@@ -7,7 +7,13 @@ const { validarCampos } = require('../middlewares/validar-campos');
 // CONTROLLERS
 // verificar correo de usuario(cuenta creada)
 // Login de usuarios
-const { verificarCorreo, login } = require('../controllers/auth');
+// envio de correo con link de reestablcer contraseña
+// reestablecer contraseña
+const { verificarCorreo, 
+        login, 
+        envioCorreoReestablecerPassword, 
+        reestablecerPassword
+} = require('../controllers/auth');
 // const router
 const router = Router();
 
@@ -23,6 +29,20 @@ router.post('/login', [
     // validar campos
     validarCampos
 ], login);
+// envio de correo con link reestablecer contraseña
+router.post('/cuentas/password-olvidado', [
+    // validar que el correo sea valido
+    check('correo', 'El correo no es valido').isEmail(),
+    // validar campos
+    validarCampos
+], envioCorreoReestablecerPassword);
+// Reestablecer contraseña
+router.post('/cuentas/reestablecer-password/:token', [
+    // validar el password
+    check('password', 'El password es obligatorio: debe tener al menos 6 caracteres').trim().isLength({ min: 6  }),
+    // validar campos
+    validarCampos
+], reestablecerPassword);
 
 // exports
 module.exports = router;

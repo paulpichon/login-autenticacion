@@ -12,6 +12,8 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 // validar correo usuario
 const { validarCorreoUsuario } = require('../helpers/validar-correo-usuario');
+// validar el ID del usuario exista en la BD
+const { validarIdUsuario } = require('../helpers/validar-id-usuario');
 // const router
 const router = Router();
 
@@ -40,7 +42,23 @@ router.post('/', [
 ], usuariosPost);
 
 // Put
-router.put('/', usuariosPut);
+router.put('/:id', [
+        // validar el id
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar que el ID exista en la BD
+        check('id').custom( validarIdUsuario ),
+         // validar el nombre
+         check('nombre_completo.nombre', 'El nombre es obligatorio').optional().trim().notEmpty(),
+         // validar el apellido
+         check('nombre_completo.apellido', 'El apellido es obligatorio').optional().trim().notEmpty(),
+         // validar el password
+         check('password', 'El password es obligatorio: debe tener al menos 6 caracteres').optional().trim().isLength({ min: 6  }),
+         // validar los intentos del usuario de entrar a su cuenta
+         check('intentos_login', 'Los intentos de login deben ser de tipo numerico').optional().trim().isNumeric(),
+         // validar fecha de actualizacion
+         check('fecha_actualizacion', 'La fecha no es valida').optional().trim().isDate(),
+         validarCampos
+], usuariosPut);
 
 // Delete
 router.delete('/', usuariosDelete);
