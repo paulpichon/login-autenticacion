@@ -28,7 +28,7 @@ const envioCorreoLinkReestablecerPassword = async ( nombre = '', correo = '' ) =
     // crear el LINK con el token de verificacion
     // token
     // Para crear el token solo enviaremos como payload el correo
-    const token = await crearJWT({ correo }, 600); // 150 son 2.5 minutos
+    const token = await crearJWT({ correo }, 900); // 900segundos son 10 minutos
     // si no se generar el token mostramos un error
     if ( !token ) throw CustomError.internalServer('No se pudo generar el token');
     // LINK el token dura 2.5 minutos despues el link no sirve
@@ -137,9 +137,6 @@ const envioCorreoLinkReestablecerPassword = async ( nombre = '', correo = '' ) =
                             </p>
                         </div>
                         <!-- Footer -->
-
-
-
                     </div>
                 </div>
             </body>
