@@ -9,10 +9,12 @@ const { validarCampos } = require('../middlewares/validar-campos');
 // Login de usuarios
 // envio de correo con link de reestablcer contraseña
 // reestablecer contraseña
+// google sign in
 const { verificarCorreo, 
         login, 
         envioCorreoReestablecerPassword, 
-        reestablecerPassword
+        reestablecerPassword,
+        googleSignIn
 } = require('../controllers/auth');
 // const router
 const router = Router();
@@ -43,6 +45,13 @@ router.post('/cuentas/reestablecer-password/:token', [
     // validar campos
     validarCampos
 ], reestablecerPassword);
+// Inciar sesion con GOOGLE SIGN IN
+router.post('/google', [
+    // validar el password
+    check('id_token', 'El ID_TOKEN es necesario').notEmpty(),
+    // validar campos
+    validarCampos
+], googleSignIn);
 
 // exports
 module.exports = router;

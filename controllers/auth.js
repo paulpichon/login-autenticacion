@@ -11,8 +11,8 @@ const { crearJWT } = require("../helpers/crear-jwt");
 // reestablecer password
 const { envioCorreoLinkReestablecerPassword, 
         reestablecerPasswordUsuario } = require("../email/servicios-correo-reestablecer-password");
-// validar el token
-const { validarJWT } = require("../helpers/validar-jwt");
+// validar el token de google
+const { googleVerify } = require("../helpers/google-verify");
 
 
 
@@ -122,8 +122,8 @@ const reestablecerPassword = async ( req, res ) => {
     const { password } = req.body;
     // validar el token y actualizar la contraseña
     reestablecerPasswordUsuario( token, password )
-        .then( () => {
-            res.json('Password reestablecido')
+        .then( async () => {
+            res.json('Password reestablecido');
         })
             // .catch( error => console.log( error, res ));
             .catch( error => {
@@ -135,10 +135,70 @@ const reestablecerPassword = async ( req, res ) => {
                 // res.json('Token invalido o ha expirado')
             });
 }
+// Google Sign In/ Authentication
+const googleSignIn = async( req, res) => {
+    
+    // id_token debe de venir en el body
+    const { id_token } = req.body;
+    // console.log( id_token );
+
+    try {
+        // const googleUser = await googleVerify( id_token );
+        // console.log( googleUser );
+        const { nombre_completo, imagen_perfil, correo } = await googleVerify( id_token );
+
+        // verificar si el correo existe en las bases de datos
+        let usuario = await Usuario.findOne({ correo });
+        // si el usuario no existe
+        if (!usuario) {
+            // Tengo que crear el usuario en caso de que no exista
+            // recordar que en password no importa lo que mandemos ya que no podra hacer match por el HASH que usamos para encriptar las PASSWORD
+            const data = {
+                nombre_completo,
+                correo,
+                password: 'google_sign_in',
+                imagen_perfil,
+                estatus: 1,
+                google: true,
+                email_validated: true, //no se envio correo, ya que entra con GOOGLESIGNIN
+
+            }
+            // creo un nuevo usuario
+            usuario = new Usuario( data );
+            // Guardamos el usuario
+            await usuario.save();
+        }
+
+        // validar si el usuario tiene estatus 1
+        if ( usuario.estatus === 0 ) {
+            return res.status(401).json({
+                msg: 'Hable con el administrador, usuario bloqueado - estado-0'
+            });
+        }
+
+        // Generar el JWT
+        // const token = await crearJWT( usuario.id );
+        const token = await crearJWT( {id: usuario.id }, 90000 );
+
+        // respuesta
+        res.json({
+            usuario,
+            token
+        });
+
+    } catch (error) {
+        console.log( error );
+        res.status(400).json({
+            ok: false,
+            msg: 'El token no se pudo verificar'
+        });
+    }
+}
 // exports
 module.exports = {
     verificarCorreo,
     login,
     envioCorreoReestablecerPassword,
     reestablecerPassword,
+    googleSignIn
 }

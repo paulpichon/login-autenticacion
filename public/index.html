@@ -3,9 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACCESO DENEGADO</title>
+    <title>Google Sign In</title>
 </head>
 <body>
-    <h1>ACCESO DENEGADO</h1>
+    <h1>Google Sign In</h1>
+    <!-- button google sign in -->
+    <div id="g_id_onload"
+        data-client_id="217262317790-a1ume2c5p57cma97locm8s6iufj5do6p.apps.googleusercontent.com"
+        data-auto_prompt="false"
+        data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+    </div>
+
+    <!-- Botton para cerrar sesion -->
+    <button id="google_signout">
+        Cerrar Sesión
+    </button>
+
+    <!-- GOOGLE SIGN IN -->
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
+    <script>
+        function handleCredentialResponse(response) {
+            
+            const body = { id_token : response.credential };
+
+            fetch('http://localhost:5000/api/auth/google', {
+                // para hacer una peticion POST, como en este caso necesitamos mandar los headers etc
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // serializar el body
+                body: JSON.stringify( body )
+            })
+                .then( resp => resp.json() )
+                    .then( resp => {
+                        console.log( resp );
+                        // despues de hacer la autenticacion con GOOGLE, podemos guardarlo en el localstorage
+                        localStorage.setItem( 'correo', resp.usuario.correo );
+                    })
+                    .catch( console.warn )
+
+
+        }
+        
+      </script>
+
 </body>
 </html>
