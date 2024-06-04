@@ -51,7 +51,23 @@
                         localStorage.setItem( 'correo', resp.usuario.correo );
                     })
                     .catch( console.warn )
+        }
 
+        // Creacion de funcion para cerrar sesion
+        const button = document.querySelector('#google_signout');
+        // agregar un evento al boton
+        button.onclick = () => {
+            
+            console.log( google.accounts.id );
+            // desactivar google identity
+            google.accounts.id.disableAutoSelect();
+
+            google.accounts.id.revoke( localStorage.getItem( 'correo'), done => {
+                // limpiar el localstorage
+                localStorage.clear();
+                // recargar la pagina
+                location.reload();
+            });
 
         }
         
