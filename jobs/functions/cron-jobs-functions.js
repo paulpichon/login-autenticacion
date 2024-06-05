@@ -6,7 +6,6 @@ const Usuario = require("../../models/usuario");
 
 // Funcion para eliminar las cuentas no verificadas por los usuarios, estas se eliminan cada 2 horas, la funcion verifica que la cuenta que esta siendo revisada tenga mas de 2 horas despues de haber sido creada, si ha pasado mas de 2 horas, se elimina fisicamente la cuenta/registro del usuario y debera volver a crear su cuenta desde 0
 const eliminarRegistrosCuentasNoVerificadas = async () => {
-    console.log("funcion iniciada");
     // fecha y horario actual
     const hoy = new Date();
     try {
@@ -21,7 +20,7 @@ const eliminarRegistrosCuentasNoVerificadas = async () => {
             // const diffInHours = difEnMilisegundos / (1000 * 60 * 60);
             // diferencia de tiempo en minutos
             const difEnMinutos = difEnMilisegundos / (1000 * 60);
-            console.log(difEnMinutos, usuario._id);
+            // console.log(difEnMinutos, usuario._id);
             // validar si difEnMinutos es mayor a 1 hora
             if (difEnMinutos >= 61) {
                 // En caso de que difEnMinutos sea mayor a 2 horas se eliminan los registros con email_validated:false
