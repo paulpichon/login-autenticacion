@@ -36,8 +36,6 @@ router.post('/', [
         check('estatus', 'El estatus debe ser de tipo numerico').optional().trim().isNumeric(),
         // validar los intentos del usuario de entrar a su cuenta
         check('intentos_login', 'Los intentos de login deben ser de tipo numerico').optional().trim().isNumeric(),
-        // validar fecha de actualizacion
-        check('fecha_actualizacion', 'La fecha no es valida').optional().trim().isDate(),
         validarCampos
 ], usuariosPost);
 
@@ -53,10 +51,18 @@ router.put('/:id', [
          check('nombre_completo.apellido', 'El apellido es obligatorio').optional().trim().notEmpty(),
          // validar el password
          check('password', 'El password es obligatorio: debe tener al menos 6 caracteres').optional().trim().isLength({ min: 6  }),
-         // validar los intentos del usuario de entrar a su cuenta
-         check('intentos_login', 'Los intentos de login deben ser de tipo numerico').optional().trim().isNumeric(),
-         // validar fecha de actualizacion
-         check('fecha_actualizacion', 'La fecha no es valida').optional().trim().isDate(),
+        //  validar el nombre del estado
+         check('lugar_radicacion.nombre_estado', 'El campo nombre_estado no puede estar vacio').optional().notEmpty(),
+        //  validar el id_municipio del estado
+         check('lugar_radicacion.id_municipio', 'El campo id_municipio no puede estar vacio').optional().notEmpty(),
+        //  validar el nombre_municipio
+         check('lugar_radicacion.nombre_municipio', 'El campo nombre_municipio no puede estar vacio').optional().notEmpty(),
+        //  validar genero
+        check('genero', 'El genero no puede estar vacio: [MASCULINO, FEMENINO, PREFIERO NO DECIR]').optional().isIn(['MASCULINO', 'FEMENINO', 'PREFIERO NO DECIR']),
+        // validar la fecha de nacimiento
+        check('fecha_nacimiento', 'La fecha no es valida').optional().isDate(),
+        // validar la imagen del perfil
+        check('imagen_perfil', 'El campo imagen_perfil no puede estar vacio').optional().trim().notEmpty(),
          validarCampos
 ], usuariosPut);
 
