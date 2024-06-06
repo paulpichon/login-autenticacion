@@ -41,6 +41,7 @@ const UsuariosSchema = Schema({
     // genero (hombre, mujer, prefiero no decir)
     genero: {
         type: String,
+        enum: ['MASCULINO', 'FEMENINO', 'PREFIERO NO DECIR']
     },
     // fecha_nacimiento
     fecha_nacimiento: {
