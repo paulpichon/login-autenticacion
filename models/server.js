@@ -14,10 +14,14 @@ class Server{
         this.app = express();
         // port
         this.port = process.env.PORT ?? 3000;
-        // Path usuarios
-        this.usuariosPath = '/api/usuarios';
-        // path auth
-        this.authPath = '/api/auth';
+        // Paths
+        this.paths = {
+            // path auth
+            auth:     '/api/auth',
+            // Path usuarios
+            usuarios: '/api/usuarios',
+        }
+        
 
 
         // conexion a la BD
@@ -44,10 +48,10 @@ class Server{
     }
     // routers
     routes() {
-        // path usuarios
-        this.app.use(this.usuariosPath, require('../routes/usuarios'));
         // path auth
-        this.app.use(this.authPath, require('../routes/auth'));
+        this.app.use(this.paths.auth, require('../routes/auth'));
+        // path usuarios
+        this.app.use(this.paths.usuarios, require('../routes/usuarios'));
     }
     // listen
     listen() {
