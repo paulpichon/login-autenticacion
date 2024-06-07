@@ -20,6 +20,8 @@ class Server{
             auth:     '/api/auth',
             // Path usuarios
             usuarios: '/api/usuarios',
+            // carga de archivos-imagenes
+            uploads: '/api/uploads'
         }
         
 
@@ -52,6 +54,8 @@ class Server{
         this.app.use(this.paths.auth, require('../routes/auth'));
         // path usuarios
         this.app.use(this.paths.usuarios, require('../routes/usuarios'));
+        // path uploads
+        this.app.use(this.paths.uploads, require('../routes/uploads'));
     }
     // listen
     listen() {
