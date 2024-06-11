@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 // Conexion a la BD archivo database/config
 const { mongoDbConnection } = require('../database/config');
+// FileUpload - carga de archivos/imagenes
+const fileUpload = require('express-fileupload');
 
 // Server Class
 class Server{
@@ -47,6 +49,11 @@ class Server{
         this.app.use( express.static('public'));
         // leer y parsear el JSON
         this.app.use( express.json() );
+        // FileUpload - Carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        }));
     }
     // routers
     routes() {
