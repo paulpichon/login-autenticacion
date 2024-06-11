@@ -1,5 +1,7 @@
 // Path
 const path = require('path');
+// UUID
+const { v4: uuidv4 } = require('uuid');
 
 // funcion para cargar/subir imagenes
 const cargarArchivos = ( req, res ) => {
@@ -16,9 +18,31 @@ const cargarArchivos = ( req, res ) => {
 
     // nombre de mi propiedad
     const { archivo } = req.files;
-    // nombre de la ruta
-    const uploadPath = path.join( __dirname, '../uploads/', archivo.name );
+    // VALIDAR LA EXTENSION DEL ARCHIVO
+    // esto nos crea un array/arreglo
+    const nombreCortado = archivo.name.split('.');
+    // extension
+    // la extension seria la ultima posicion del arreglo nombreCortado
+    const extension = nombreCortado[ nombreCortado.length - 1];
+    
+    // VALIDAR LA EXTENSION DEL ARCHIVO
+    // extensiones validas
+    const extensionesValidas = ['png', 'jpg', 'jpeg', 'gif'];
+    // validar estension
+    if ( !extensionesValidas.includes( extension ) ) {
+        // si la extension del archivo subido no esta dentro del arreglo, se muestra un error
+        return res.status( 400 ).json({
+            msg: `La extension ${ extension } no es permitida, ${ extensionesValidas }`
+        });
+    }
 
+    // UBICAR Y CAMBIAR EL NOMBRE DEL ARCHIVO
+    // Nombre del archivo mas la extension
+    // uuid() ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+    const nombreTemp = `${ uuidv4() }.${ extension }`;
+
+    // nombre de la ruta
+    const uploadPath = path.join( __dirname, '../uploads/', nombreTemp );
     // usar el metodo mv() para cambiar el archivo a cualquier parte de nuestro servidor
     archivo.mv(uploadPath, (err) => {
         // si hay algun error
