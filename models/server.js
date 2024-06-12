@@ -52,7 +52,9 @@ class Server{
         // FileUpload - Carga de archivos
         this.app.use(fileUpload({
             useTempFiles : true,
-            tempFileDir : '/tmp/'
+            tempFileDir : '/tmp/',
+            // crear carpeta si es que no existe a la hora de subir un archivo, debemos tener cuidado ya que se podrian crear carpetas que no necesitamos
+            createParentPath: true,
         }));
     }
     // routers
