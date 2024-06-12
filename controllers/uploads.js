@@ -1,3 +1,5 @@
+// response 
+const { response } = require("express");
 // subir archivos
 const { subirArchivo } = require("../helpers/subir-archivo");
 
@@ -23,10 +25,21 @@ const cargarArchivos = async ( req, res ) => {
 
     } catch (msg) {
         return res.status(400).json({ msg });
-    }
-    
+    }    
 }
+
+// funcion para actualizar la imagen de perfil de usuario
+const actualizarImagen = async ( req, res = response) => {
+    // obtenemos el id de usuario y el nombre de la coleccion
+    const { id, coleccion } = req.params;
+
+    // respuesta
+    res.json({ id, coleccion });
+
+}
+
 // exports
 module.exports = {
-    cargarArchivos
+    cargarArchivos,
+    actualizarImagen
 }
