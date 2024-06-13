@@ -86,9 +86,51 @@ const actualizarImagen = async ( req, res = response) => {
     }
 
 }
+// funcion para mostrar imagen de perfil
+const mostrarImagen = async ( req, res ) => {
+    
+    // obtenemos el id de usuario y el nombre de la coleccion
+    const { id, coleccion } = req.params;
+    // modelo
+    let modelo;
+    // se valida que el ID de usuario exista en la coleccion
+    switch ( coleccion ) {
+        case 'usuarios':
+            // buscamos el usuario con el ID
+            modelo = await Usuario.findById( id );
+            // si no existe
+            if ( !modelo ) {
+                return res.status( 400 ).json({
+                    msg: `No existe un usuario con el ID: ${ id }`
+                });
+            } 
 
+        break;
+    
+        default:
+            return res.status( 500 ).json({ msg: 'Verificar si hay alguna validacion que se nos olvido'});
+    }
+
+    // LIMPIAR LAS IMAGENES PREVIAS
+    // verificar si existe modelo.imagen_perfil en la BD
+    if ( modelo.imagen_perfil ) {
+        // si existe hay que borrar la imagen del servidor
+        // se construye el path de la imagen a borrar
+        const pathImagen = path.join(__dirname, '../uploads/', coleccion, modelo.imagen_perfil);
+        // verificar si existe la imagen fisicamente
+        if ( fs.existsSync( pathImagen )) {
+            // si existe la imagen, retornamos la imagen
+            return res.sendFile( pathImagen );
+        }
+    }
+    
+    // falta el placeholder
+    res.json({ msg: 'falta el placeholder'});
+
+}
 // exports
 module.exports = {
     cargarArchivos,
-    actualizarImagen
+    actualizarImagen,
+    mostrarImagen
 }

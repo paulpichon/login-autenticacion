@@ -2,7 +2,11 @@
 const { Router } = require('express');
 // Cargar archivos
 // actualizar imagen de usuario
-const { cargarArchivos, actualizarImagen } = require('../controllers/uploads');
+// mostrar imagen de perfil
+const { cargarArchivos, 
+        actualizarImagen, 
+        mostrarImagen 
+} = require('../controllers/uploads');
 // Express validator
 const { check } = require('express-validator');
 // validar campos
@@ -13,6 +17,18 @@ const { coleccionesPermitidas } = require('../helpers/colecciones-permitidas');
 // const router
 const router = Router();
 
+// GET
+// obtener la ruta de la imagen de perfil
+router.get('/:coleccion/:id', [
+    // validar que el mongo sea valido
+    check('id', 'El ID debe ser un MongoID').isMongoId(),
+    // validar la coleccion, notar que se mandan argumentos
+    // podemos hacer lo siguiente
+    // c = coleccion
+    // ['usuarios'] ---> aqui se ponen las colecciones permitidas
+    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios']) ),
+    validarCampos
+], mostrarImagen);
 // POST
 // Subir archivos-imagenes
 // middleware validarArchivoSubir
