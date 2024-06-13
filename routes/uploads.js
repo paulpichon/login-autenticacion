@@ -6,7 +6,8 @@ const { cargarArchivos, actualizarImagen } = require('../controllers/uploads');
 // Express validator
 const { check } = require('express-validator');
 // validar campos
-const { validarCampos } = require('../middlewares/validar-campos');
+// validarArchivo
+const { validarCampos, validarArchivoSubir } = require('../middlewares');
 // colecciones permitidas
 const { coleccionesPermitidas } = require('../helpers/colecciones-permitidas');
 // const router
@@ -14,10 +15,13 @@ const router = Router();
 
 // POST
 // Subir archivos-imagenes
-router.post('/', cargarArchivos);
+// middleware validarArchivoSubir
+router.post('/', validarArchivoSubir, cargarArchivos);
 // ruta para actualizar la imagen de perfil de usuario
 // para el endpoint necesitamos el nombre de la coleccion de mongodb y el id del usuario al que se le va a actualizar la imagen de perfil
 router.put('/:coleccion/:id', [
+    // validar el archivo a subir
+    validarArchivoSubir,
     // validar que el mongo sea valido
     check('id', 'El ID debe ser un MongoID').isMongoId(),
     // validar la coleccion, notar que se mandan argumentos

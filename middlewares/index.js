@@ -1,6 +1,6 @@
 // exports
 // validarcampos
-const validarCampos = require('../middlewares/validarCampos');
+const validarCampos = require('../middlewares/validar-campos');
 // validarArchivoSubir
 const validarArchivo = require('../middlewares/validar-archivo');
 
