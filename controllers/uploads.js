@@ -1,5 +1,7 @@
 // response 
 const { response } = require("express");
+// Usuario model
+const Usuario = require("../models/usuario");
 // subir archivos
 const { subirArchivo } = require("../helpers/subir-archivo");
 
@@ -32,9 +34,37 @@ const cargarArchivos = async ( req, res ) => {
 const actualizarImagen = async ( req, res = response) => {
     // obtenemos el id de usuario y el nombre de la coleccion
     const { id, coleccion } = req.params;
+    // modelo
+    let modelo;
+    // se valida que el ID de usuario exista en la coleccion
+    switch ( coleccion ) {
+        case 'usuarios':
+            // buscamos el usuario con el ID
+            modelo = await Usuario.findById( id );
+            // si no existe
+            if ( !modelo ) {
+                return res.status( 400 ).json({
+                    msg: `No existe un usuario con el ID: ${ id }`
+                });
+            } 
+
+        break;
+    
+        default:
+            return res.status( 500 ).json({ msg: 'Verificar si hay alguna validacion que se nos olvido'});
+    }
+    // subir archivo
+    // recordemos que el tercer argumento de subirArchivo() es el nombre de la carpeta que en este caso seria el de la coleccion
+    const nombre = await subirArchivo( req.files, undefined, coleccion );
+    // asignamos el nombre del archivo al modelo.imagen_perfil   
+    modelo.imagen_perfil = nombre;
+    // fecha de actualizacion del registro
+    modelo.fecha_actualizacion = Date.now();
+    // lo guardamos en la BD
+    await modelo.save();
 
     // respuesta
-    res.json({ id, coleccion });
+    res.json({ modelo });
 
 }
 
