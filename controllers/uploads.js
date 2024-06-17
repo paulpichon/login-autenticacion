@@ -123,9 +123,10 @@ const mostrarImagen = async ( req, res ) => {
             return res.sendFile( pathImagen );
         }
     }
-    
-    // falta el placeholder
-    res.json({ msg: 'falta el placeholder'});
+    // NO IMAGE FOUND
+    const noImageFound = path.join(__dirname, '../assets/no-image.jpg');
+    // retornamos en caso de no haber imagen de perfil
+    res.sendFile( noImageFound )
 
 }
 // exports

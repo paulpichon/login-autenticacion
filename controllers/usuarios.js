@@ -1,4 +1,6 @@
 // controllers usuarios
+// Path
+const path = require('path');
 // Modelo Usuario
 const Usuario = require("../models/usuario");
 // bcryptjs
@@ -64,6 +66,26 @@ const usuariosPut = async (req, res) => {
             resto.password = bcryptjs.hashSync(password, salt);
         }
     }
+
+    /****************
+    prueba
+    ***************/ 
+    if (req.files && req.files.imagen_perfil) {
+        const imagen_perfil = req.files.imagen_perfil;
+        const uploadPath = path.join(__dirname, '../uploads', imagen_perfil.name);
+        // Mueve el archivo a la carpeta de uploads
+        imagen_perfil.mv(uploadPath, (err) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+        });
+
+        resto.imagen_perfil = `${imagen_perfil.name}`;
+    }
+    /*******
+    fin prueba
+    *******/ 
+
     // fecha de actualizacion del registro
     resto.fecha_actualizacion = Date.now();
     // actualizar
