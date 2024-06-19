@@ -71,7 +71,16 @@ const actualizarImagen = async ( req, res = response) => {
 
         // subir archivo
         // recordemos que el tercer argumento de subirArchivo() es el nombre de la carpeta que en este caso seria el de la coleccion
-        const nombre = await subirArchivo( req.files, undefined, coleccion );
+        // const nombre = await subirArchivo( req.files, undefined, coleccion );
+        let nombre;
+        if ( !Array.isArray( req.files.archivo ) ) {
+            const archivos = [req.files.archivo];
+            // console.log( archivos, 'archivos mandados' );
+            const archivo = archivos.at(0);
+            // console.log( archivo, 'archivo prueba' );
+            nombre = await subirArchivo( archivo, undefined, coleccion );
+            // respuesta
+        }
         // asignamos el nombre del archivo al modelo.imagen_perfil   
         modelo.imagen_perfil = nombre;
         // fecha de actualizacion del registro
