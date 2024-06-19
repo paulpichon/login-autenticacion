@@ -9,6 +9,8 @@ const bcryptjs = require('bcryptjs');
 const { crearJWT } = require("../helpers/crear-jwt");
 // Envio de correo para verificar cuenta
 const { envioCorreoVerificacion } = require("../email/servicios-autenticacion-correo");
+// Subir archivo
+const { subirArchivo } = require('../helpers/subir-archivo');
 
 //GET 
 const usuariosGet = (req, res) => {
@@ -70,17 +72,22 @@ const usuariosPut = async (req, res) => {
     /****************
     prueba
     ***************/ 
+   
+    // Se verifica que vengan archivos en el FORM-DATA    
     if (req.files && req.files.imagen_perfil) {
-        const imagen_perfil = req.files.imagen_perfil;
-        const uploadPath = path.join(__dirname, '../uploads', imagen_perfil.name);
-        // Mueve el archivo a la carpeta de uploads
-        imagen_perfil.mv(uploadPath, (err) => {
-            if (err) {
-                return res.status(500).send(err);
+        try {
+            if ( !Array.isArray( req.files.imagen_perfil ) ) {
+                const archivos = [req.files.imagen_perfil];
+                // console.log( archivos, 'archivos mandados' );
+                const archivo = archivos.at(0);
+                // console.log( archivo, 'archivo prueba' );
+                const nombre = await subirArchivo( archivo, undefined, 'usuarios' );
+                resto.imagen_perfil = nombre;
             }
-        });
-
-        resto.imagen_perfil = `${imagen_perfil.name}`;
+        } catch (msg) {
+            // console.log(msg);
+            return res.status(400).json({ msg });
+        }
     }
     /*******
     fin prueba
