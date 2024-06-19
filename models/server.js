@@ -51,7 +51,8 @@ class Server{
         this.app.use( express.json() );
         // FileUpload - Carga de archivos
         this.app.use(fileUpload({
-            useTempFiles : true,
+            // desactivamos useTempFiles, ya que necesitamos usar el buffer que viene en la imagen, y si activamos useTempFiles el buffer viene vacio
+            // useTempFiles : true,
             tempFileDir : '/tmp/',
             // crear carpeta si es que no existe a la hora de subir un archivo, debemos tener cuidado ya que se podrian crear carpetas que no necesitamos
             createParentPath: true,
