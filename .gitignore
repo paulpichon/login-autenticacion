@@ -1,5 +1,5 @@
 node_modules/
 .env
 # uploads
-# no subir nada de la caprta usuarios
-uploads/usuarios/**.*
+# no subir nada de la carpeta imagen-perfil-usuarios ---> carpeta donde se guarda las imagenes de perfil de los usuarios
+uploads/imagen-perfil-usuarios/**.*
