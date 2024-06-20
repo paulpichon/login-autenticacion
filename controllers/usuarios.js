@@ -1,6 +1,8 @@
 // controllers usuarios
 // Path
 const path = require('path');
+// filesystem
+const fs   = require('fs');
 // Modelo Usuario
 const Usuario = require("../models/usuario");
 // bcryptjs
@@ -54,7 +56,7 @@ const usuariosPut = async (req, res) => {
     // se quita _id y correo ya que esos campos no se deben de actualizar
     const { _id, password, correo, google, ...resto } = req.body;
     // verificar si es usuario de google
-    // debemos mandar por default el cmapo GOOGLE en el formulario del FRONTEND
+    // debemos mandar por default el campo GOOGLE en el formulario del FRONTEND
     if ( google ) {
         // si es usuario de google, no se actualiza el correo
         // no se actualiza el password
@@ -69,10 +71,22 @@ const usuariosPut = async (req, res) => {
         }
     }
 
-    /****************
-    prueba
-    ***************/ 
-   
+    // ELIMINAR LA IMAGEN ANTERIOR DE PERFIL DEL USUARIO
+    // Consultamos la BD si trae algo la imagen_perfil
+    const { imagen_perfil } = await Usuario.findById( id )
+    // verificar si existe resto.imagen_perfil en la BD
+    if ( imagen_perfil ) {
+        // si existe hay que borrar la imagen del servidor
+        // se construye el path de la imagen a borrar
+        const pathImagen = path.join(__dirname, '../uploads/usuarios/', imagen_perfil);
+        // verificar si existe la imagen fisicamente
+        if ( fs.existsSync( pathImagen )) {
+            // si existe la imagen, la borramos
+            fs.unlinkSync( pathImagen );
+        }
+    }
+
+    // ACTUALIZAR LA IMAGEN_perfil DEL USUARIO
     // Se verifica que vengan archivos en el FORM-DATA    
     if (req.files && req.files.imagen_perfil) {
         try {
@@ -89,9 +103,6 @@ const usuariosPut = async (req, res) => {
             return res.status(400).json({ msg });
         }
     }
-    /*******
-    fin prueba
-    *******/ 
 
     // fecha de actualizacion del registro
     resto.fecha_actualizacion = Date.now();
