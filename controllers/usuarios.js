@@ -93,9 +93,13 @@ const usuariosPut = async (req, res) => {
             if ( !Array.isArray( req.files.imagen_perfil ) ) {
                 const archivos = [req.files.imagen_perfil];
                 // console.log( archivos, 'archivos mandados' );
+                // con .at(0) decimos que solo tomen en cuenta un archivos aunque se suban mas
                 const archivo = archivos.at(0);
-                // console.log( archivo, 'archivo prueba' );
-                const nombre = await subirArchivo( archivo, undefined, 'usuarios' );
+                // archivo = imagen cargada
+                // undefined = extensiones validas, en este caso no se manda nada ya que por defecto estan jpeg, jpg, png
+                // imagen-perfil-usuarios = el nombre de la carpeta/directorio donde se van a subir las imagenes de perfil
+                const nombre = await subirArchivo( archivo, undefined, 'imagen-perfil-usuarios' );
+                // asignamos a resto.imagen_perfil el nombre del archivo
                 resto.imagen_perfil = nombre;
             }
         } catch (msg) {
