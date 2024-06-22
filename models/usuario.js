@@ -38,6 +38,11 @@ const UsuariosSchema = Schema({
             default: undefined
         },
     },
+    // url de la cuenta del usuario
+    url: {
+        type: String,
+        required: [true, 'El URL es obligatorio']
+    },
     // genero (hombre, mujer, prefiero no decir)
     genero: {
         type: String,
