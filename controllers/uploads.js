@@ -127,7 +127,6 @@ const mostrarImagen = async ( req, res ) => {
         // si existe hay que borrar la imagen del servidor
         // se construye el path de la imagen a borrar
         const pathImagen = path.join(__dirname, '../uploads/', coleccion, modelo.imagen_perfil);
-        console.log( pathImagen );
         // verificar si existe la imagen fisicamente
         if ( fs.existsSync( pathImagen )) {
             // si existe la imagen, retornamos la imagen
