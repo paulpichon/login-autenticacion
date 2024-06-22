@@ -26,7 +26,8 @@ router.get('/:coleccion/:id', [
     // podemos hacer lo siguiente
     // c = coleccion
     // ['usuarios'] ---> aqui se ponen las colecciones permitidas
-    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios']) ),
+    // por el momento solo se permiten imagen-perfil-usuarios ----> Imagenes de perfil de usuarios
+    check('coleccion').custom( c => coleccionesPermitidas( c, ['imagen-perfil-usuarios']) ),
     validarCampos
 ], mostrarImagen);
 // POST
