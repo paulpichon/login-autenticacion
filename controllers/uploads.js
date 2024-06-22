@@ -103,8 +103,10 @@ const mostrarImagen = async ( req, res ) => {
     // modelo
     let modelo;
     // se valida que el ID de usuario exista en la coleccion
+    // colecciones validas para mostrar imagenes:
+    // imagen-perfil-usuarios   ----> imagenes de perfil de usuarios
     switch ( coleccion ) {
-        case 'usuarios':
+        case 'imagen-perfil-usuarios':
             // buscamos el usuario con el ID
             modelo = await Usuario.findById( id );
             // si no existe
@@ -113,7 +115,6 @@ const mostrarImagen = async ( req, res ) => {
                     msg: `No existe un usuario con el ID: ${ id }`
                 });
             } 
-
         break;
     
         default:
@@ -126,6 +127,7 @@ const mostrarImagen = async ( req, res ) => {
         // si existe hay que borrar la imagen del servidor
         // se construye el path de la imagen a borrar
         const pathImagen = path.join(__dirname, '../uploads/', coleccion, modelo.imagen_perfil);
+        console.log( pathImagen );
         // verificar si existe la imagen fisicamente
         if ( fs.existsSync( pathImagen )) {
             // si existe la imagen, retornamos la imagen
