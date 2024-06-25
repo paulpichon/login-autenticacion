@@ -13,6 +13,8 @@ const { crearJWT } = require("../helpers/crear-jwt");
 const { envioCorreoVerificacion } = require("../email/servicios-autenticacion-correo");
 // Subir archivo
 const { subirArchivo } = require('../helpers/subir-archivo');
+// Funcion para crear la URL del usuario
+const { crearUrlUsuarioPerfil } = require('../helpers/crear-url-usuario');
 
 //GET 
 const usuariosGet = (req, res) => {
@@ -27,6 +29,14 @@ const usuariosPost = async (req, res) => {
     const { nombre_completo, correo, password } = req.body;
     // crear el usuario
     const usuario = await Usuario({ nombre_completo, correo, password });
+    // creacion de la URL
+    // Debemos verificar que la URL no exista en otra cuenta de usuario ---> podemos crear un middleware para verificarlo o una funcion
+    // para la creacion de la URL debemos pasar algunos parametros:
+    // const url_usuario = await crearUrlUsuarioPerfil( nombre_completo );
+    await crearUrlUsuarioPerfil( nombre_completo ).then(uniqueUrl => {
+        // lo insertamos en el objeto
+        usuario.url = uniqueUrl;
+    });
     // encriptar la contraseña 
     const salt = bcryptjs.genSaltSync(10);
     usuario.password = bcryptjs.hashSync(password, salt);
@@ -39,7 +49,7 @@ const usuariosPost = async (req, res) => {
     // enviar el correo con el link para verificar la cuenta 
     if ( process.env.SEND_EMAIL !== false ) {
         // si es true se manda el email de lo contrario no se envia
-        await envioCorreoVerificacion( usuario.nombre, usuario.correo );        
+        // await envioCorreoVerificacion( usuario.nombre, usuario.correo );        
     }
     // RESPUESTA
     res.json({
