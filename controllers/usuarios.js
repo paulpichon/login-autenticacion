@@ -32,10 +32,10 @@ const usuariosPost = async (req, res) => {
     // creacion de la URL
     // Debemos verificar que la URL no exista en otra cuenta de usuario ---> podemos crear un middleware para verificarlo o una funcion
     // para la creacion de la URL debemos pasar algunos parametros:
-    // const url_usuario = await crearUrlUsuarioPerfil( nombre_completo );
-    await crearUrlUsuarioPerfil( nombre_completo ).then(uniqueUrl => {
+    // nombre_completo: nombre y apellidos, de esta forma se creara la URL del usuario
+    await crearUrlUsuarioPerfil( nombre_completo ).then( urlUsuario => {
         // lo insertamos en el objeto
-        usuario.url = uniqueUrl;
+        usuario.url = urlUsuario;
     });
     // encriptar la contraseña 
     const salt = bcryptjs.genSaltSync(10);
