@@ -19,7 +19,7 @@ const crearUrlUsuarioPerfil = async ({ nombre, apellido }) => {
 	// contador ---> este ira incrementando en 1
 	let contador = 1;
 	// mientras siga habiendo coincidencia de URL repetidas el contador se ira incrementando
-	while ( Usuario.findOne({ url: url })) {
+	while ( await Usuario.findOne({ url: url })) {
 		// se forma la URL
 		url = `${baseUrl}.${contador}`;
 		// se incrementa
