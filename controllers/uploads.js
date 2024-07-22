@@ -61,7 +61,7 @@ const actualizarImagen = async ( req, res = response) => {
         if ( modelo.imagen_perfil ) {
             // si existe hay que borrar la imagen del servidor
             // se construye el path de la imagen a borrar
-            const pathImagen = path.join(__dirname, '../uploads/', coleccion, modelo.imagen_perfil);
+            const pathImagen = path.join(__dirname, '../uploads/imagen-perfil-usuarios/', modelo.imagen_perfil);
             // verificar si existe la imagen fisicamente
             if ( fs.existsSync( pathImagen )) {
                 // si existe la imagen, la borramos
@@ -78,7 +78,8 @@ const actualizarImagen = async ( req, res = response) => {
             // console.log( archivos, 'archivos mandados' );
             const archivo = archivos.at(0);
             // console.log( archivo, 'archivo prueba' );
-            nombre = await subirArchivo( archivo, undefined, coleccion );
+            // nombre = await subirArchivo( archivo, undefined, coleccion );
+            nombre = await subirArchivo( archivo, undefined, 'imagen-perfil-usuarios' );
             // respuesta
         }
         // asignamos el nombre del archivo al modelo.imagen_perfil   
