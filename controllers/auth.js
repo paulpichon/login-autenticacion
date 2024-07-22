@@ -13,6 +13,8 @@ const { envioCorreoLinkReestablecerPassword,
         reestablecerPasswordUsuario } = require("../email/servicios-correo-reestablecer-password");
 // validar el token de google
 const { googleVerify } = require("../helpers/google-verify");
+// crear URL para el perfil de usuario
+const { crearUrlUsuarioPerfil } = require("../helpers/crear-url-usuario");
 
 
 
@@ -161,8 +163,12 @@ const googleSignIn = async( req, res) => {
                 estatus: 1,
                 google: true,
                 email_validated: true, //no se envio correo, ya que entra con GOOGLESIGNIN
-
             }
+            // Crear URL del usuario que se registra con google signin
+            await crearUrlUsuarioPerfil( nombre_completo ).then( urlUsuario => {
+                // lo insertamos en el objeto
+                data.url = urlUsuario;
+            });
             // creo un nuevo usuario
             usuario = new Usuario( data );
             // Guardamos el usuario
