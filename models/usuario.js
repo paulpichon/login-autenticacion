@@ -54,7 +54,8 @@ const UsuariosSchema = Schema({
     },
     // imagen_perfil
     imagen_perfil: {
-        type: String
+        type: String,
+        default: 'assets/no-image.jpg'
     },
     // estatus(no activada = 0, cuenta activada = 1, infringio alguna norma de la comunidad = 2)
     // con este campo podemos cambiar el estatus del usuario
