@@ -2,9 +2,10 @@
 const { Router } = require('express');
 // CONTROLLERS
 const { usuariosGet, 
+        usuarioGet,
         usuariosPost, 
         usuariosPut, 
-        usuariosDelete 
+        usuariosDelete, 
 } = require('../controllers/usuarios');
 // Express Validator
 const { check } = require('express-validator');
@@ -17,8 +18,10 @@ const { validarIdUsuario } = require('../helpers/validar-id-usuario');
 // const router
 const router = Router();
 
-// Get
+// Get obtener usuarios
 router.get('/', usuariosGet);
+// obtener usuario por URL
+router.get('/:url', usuarioGet);
 
 // Post
 router.post('/', [
@@ -67,6 +70,6 @@ router.put('/:id', [
 ], usuariosPut);
 
 // Delete
-router.delete('/', usuariosDelete);
+router.delete('/:id', usuariosDelete);
 // exports
 module.exports = router;
