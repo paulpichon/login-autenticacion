@@ -15,12 +15,21 @@ const { envioCorreoVerificacion } = require("../email/servicios-autenticacion-co
 const { subirArchivo } = require('../helpers/subir-archivo');
 // Funcion para crear la URL del usuario
 const { crearUrlUsuarioPerfil } = require('../helpers/crear-url-usuario');
+// Funcion para eliminar los archivos del usuario
+const { eliminarArchivosUsuario } = require('../helpers/eliminar-archivos-usuario');
 
 //GET 
 const usuariosGet = (req, res) => {
     // RESPUESTA
     res.json({
-        msg: 'GET APP CONTROLLERS'
+        msg: 'GET USUARIOS APP CONTROLLERS'
+    });
+}
+// Get usuario por URL
+const usuarioGet = ( req, res) => {
+    // RESPUESTA
+    res.json({
+        msg: 'GET USUARIO APP CONTROLLERS'
     });
 }
 // POST
@@ -130,15 +139,26 @@ const usuariosPut = async (req, res) => {
     });
 }
 // DELETE
-const usuariosDelete = (req, res) => {
+const usuariosDelete = async (req, res) => {
+    // Obtener el ID del usuario
+    const { id } = req.params;
+    // buscar al usuario en la BD
+    // debemos analizar si borramos fisicamente al usuario de la BD o solo actualizamos su estatus en la BD
+    // Eliminar los archivos que el usuario ha subido
+    await eliminarArchivosUsuario( id );
+    // Por el momento vamos a eliminarlo fisicamente de las BD
+    await Usuario.findByIdAndDelete( id );
+    // guardar la actualizacion
+    // await usuario.save();
     // RESPUESTA
     res.json({
-        msg: 'DELETE APP CONTROLLERS'
+        msg: 'Cuenta eliminada'
     });
 }
 // exports
 module.exports = {
     usuariosGet,
+    usuarioGet,
     usuariosPost,
     usuariosPut,
     usuariosDelete
