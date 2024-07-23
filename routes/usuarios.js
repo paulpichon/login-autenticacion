@@ -66,10 +66,16 @@ router.put('/:id', [
         check('fecha_nacimiento', 'La fecha no es valida').optional().isDate(),
         // validar la imagen del perfil
         check('imagen_perfil', 'El campo imagen_perfil no puede estar vacio').optional().trim().notEmpty(),
-         validarCampos
+        validarCampos
 ], usuariosPut);
 
 // Delete
-router.delete('/:id', usuariosDelete);
+router.delete('/:id', [
+        // validar el id
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar que el ID exista en la BD
+        check('id').custom( validarIdUsuario ),
+        validarCampos
+], usuariosDelete);
 // exports
 module.exports = router;
