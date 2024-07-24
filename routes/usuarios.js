@@ -15,6 +15,8 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarCorreoUsuario } = require('../helpers/validar-correo-usuario');
 // validar el ID del usuario exista en la BD
 const { validarIdUsuario } = require('../helpers/validar-id-usuario');
+// validar el JWT del usuario con sesion iniciada
+const { validarJWT } = require('../middlewares/validar-jwt');
 // const router
 const router = Router();
 
@@ -71,6 +73,8 @@ router.put('/:id', [
 
 // Delete
 router.delete('/:id', [
+        // validar que el token venga y sea valido
+        validarJWT,
         // validar el id
         check('id', 'El ID no es valido').isMongoId(),
         // validar que el ID exista en la BD
