@@ -18,15 +18,18 @@ const { crearUrlUsuarioPerfil } = require('../helpers/crear-url-usuario');
 // Funcion para eliminar los archivos del usuario
 const { eliminarArchivosUsuario } = require('../helpers/eliminar-archivos-usuario');
 
-//GET 
+//GET - Mostrar todos los usuarios
 const usuariosGet = (req, res) => {
+    // DE MOMENTO ESTA API NO SE VA A OCUPAR
     // RESPUESTA
     res.json({
-        msg: 'GET USUARIOS APP CONTROLLERS'
+        msg: 'DE MOMENTO ESTA API PARA MOSTRAR A LOS USUARIOS NO SE VA A OCUPAR'
     });
 }
-// Get usuario por URL
+// Get - Mostrar Usuario por URL
 const usuarioGet = ( req, res) => {
+    // Obtener la URL del usuario
+
     // RESPUESTA
     res.json({
         msg: 'GET USUARIO APP CONTROLLERS'
@@ -145,11 +148,9 @@ const usuariosDelete = async (req, res) => {
     // buscar al usuario en la BD
     // debemos analizar si borramos fisicamente al usuario de la BD o solo actualizamos su estatus en la BD
     // Eliminar los archivos que el usuario ha subido
-    // await eliminarArchivosUsuario( id );
+    await eliminarArchivosUsuario( id );
     // Por el momento vamos a eliminarlo fisicamente de las BD
-    // await Usuario.findByIdAndDelete( id );
-    // guardar la actualizacion
-    // await usuario.save();
+    await Usuario.findByIdAndDelete( id );
     // RESPUESTA
     res.json({
         msg: 'Cuenta eliminada'
