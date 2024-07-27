@@ -29,11 +29,11 @@ const validarJWT = async (req, res, next ) => {
                 msg: 'Token no válido - usuario no existe en BD'
             });
         }
-        //validar que el usuario autenticado tenga estado:true
-        if ( !usuario.estatus ) {
+        //validar que el usuario autenticado tenga activada su cuenta, de lo contrario se mostrar un error porque debe estar activada la cuenta para que el mismo usuario pueda borrar su cuenta
+        if ( usuario.estatus === 0 || usuario.email_validated === false ) {
             return res.status(401).json({
                 //mostramos alerta
-                msg: 'Token no válido - usuario con estatus:0'
+                msg: 'Token no válido - cuenta no activada por usuario: para elimar la cuenat el usuario debe de activar su cuenta'
             });
         }
         // creamos una propiedad nueva en el request
