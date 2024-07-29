@@ -56,6 +56,8 @@ router.post('/', [
 
 // Put
 router.put('/:id', [
+        // validar que el token venga y sea valido
+        validarJWT,
         // validar el id
         check('id', 'El ID no es valido').isMongoId(),
         // validar que el ID exista en la BD
