@@ -28,7 +28,7 @@ router.get('/', usuariosGet);
 // obtener usuario por URL
 router.get('/:url', [
         // validar URL
-        // check('url', 'La URL no es valida').trim().notEmpty(),
+        check('url', 'La URL no es valida').trim(),
         // validar la URL exista en la BD
         validarUrlUsuario,
         // validar los campos
