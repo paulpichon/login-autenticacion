@@ -27,12 +27,14 @@ const usuariosGet = (req, res) => {
     });
 }
 // Get - Mostrar Usuario por URL
-const usuarioGet = ( req, res) => {
+const usuarioGet = async ( req, res) => {
     // Obtener la URL del usuario
-
+    const { url } = req.params;
+    // buscar la informacion del usuario acorde a la URL obtenida
+    const usuario = await Usuario.findOne({ url });
     // RESPUESTA
     res.json({
-        msg: 'GET USUARIO APP CONTROLLERS'
+        usuario
     });
 }
 // POST

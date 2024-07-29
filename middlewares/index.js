@@ -5,10 +5,13 @@ const validarCampos = require('../middlewares/validar-campos');
 const validarArchivo = require('../middlewares/validar-archivo');
 // validarJWT
 const validarJWT = require('../middlewares/validar-jwt');
+// Validar URL 
+const validarUrlUsuario = require('../middlewares/validar-url-usuario');
 
 // exports
 module.exports = {
     ...validarArchivo,
     ...validarCampos,
-    ...validarJWT
+    ...validarJWT,
+    ...validarUrlUsuario
 }

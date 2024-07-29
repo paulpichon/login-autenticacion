@@ -17,13 +17,21 @@ const { validarCorreoUsuario } = require('../helpers/validar-correo-usuario');
 const { validarIdUsuario } = require('../helpers/validar-id-usuario');
 // validar el JWT del usuario con sesion iniciada
 const { validarJWT } = require('../middlewares/validar-jwt');
+// Vlidar la URL del usuario
+const { validarUrlUsuario } = require('../middlewares/validar-url-usuario');
+
 // const router
 const router = Router();
 
 // Get obtener usuarios
 router.get('/', usuariosGet);
 // obtener usuario por URL
-router.get('/:url', usuarioGet);
+router.get('/:url', [
+        // validar la URL exista en la BD
+        validarUrlUsuario,
+        // validar los campos
+        validarCampos
+], usuarioGet);
 
 // Post
 router.post('/', [
