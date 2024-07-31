@@ -27,6 +27,8 @@ const router = Router();
 router.get('/', usuariosGet);
 // obtener usuario por URL
 router.get('/:url', [
+        // validar que el token venga y sea valido
+        validarJWT,
         // validar URL
         check('url', 'La URL no es valida').trim(),
         // validar la URL exista en la BD
