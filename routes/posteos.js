@@ -14,9 +14,9 @@ const router = Router();
 // Get obtener Posteos
 router.get('/', posteosGet);
 // Get obtener un posteo
-router.get('/:id', posteoGet);
+router.get('/post/:id', posteoGet);
 // Get posteos de usuario
-router.get('/:idUsuario', posteosUsuarioGet);
+router.get('/usuario/:idUsuario', posteosUsuarioGet);
 // Crear un Post
 router.post('/', posteosPost);
 // Put - Actualizar un posteo
