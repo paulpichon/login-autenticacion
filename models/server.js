@@ -23,7 +23,9 @@ class Server{
             // Path usuarios
             usuarios: '/api/usuarios',
             // carga de archivos-imagenes
-            uploads: '/api/uploads'
+            uploads: '/api/uploads',
+            // Path posteos
+            posteos: '/api/posteos'
         }
         
 
@@ -66,6 +68,8 @@ class Server{
         this.app.use(this.paths.usuarios, require('../routes/usuarios'));
         // path uploads
         this.app.use(this.paths.uploads, require('../routes/uploads'));
+        // path posteos
+        this.app.use(this.paths.posteos, require('../routes/posteos'));
     }
     // listen
     listen() {
