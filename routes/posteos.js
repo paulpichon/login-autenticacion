@@ -8,6 +8,12 @@ const { posteosGet,
         posteosPut, 
         posteosDelete, 
 } = require('../controllers/posteos');
+// validar el JWT del usuario con sesion iniciada
+const { validarJWT } = require('../middlewares/validar-jwt');
+// Validar Campos
+const { validarCampos } = require('../middlewares/validar-campos');
+
+
 // const router
 const router = Router();
 
@@ -18,7 +24,12 @@ router.get('/post/:id', posteoGet);
 // Get posteos de usuario
 router.get('/usuario/:idUsuario', posteosUsuarioGet);
 // Crear un Post
-router.post('/', posteosPost);
+router.post('/', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // Validar los campos
+        validarCampos
+], posteosPost);
 // Put - Actualizar un posteo
 router.put('/:id', posteosPut);
 // Delete -eliminar un posteo

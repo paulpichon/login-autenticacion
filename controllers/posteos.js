@@ -1,3 +1,8 @@
+// Necesitamos un TOKEN para poder crear un POSTEO
+// Modelo Posteo
+const Posteo = require("../models/posteo");
+// jsonwebtoken
+const jwt = require("jsonwebtoken")
 
 //GET - Mostrar todos los posteos de todos los usuarios
 const posteosGet = (req, res) => {
@@ -23,10 +28,18 @@ const posteosUsuarioGet = async ( req, res) => {
 }
 // POST - Crear un POSTEO
 const posteosPost = async (req, res) => {
+    // Obtener la informacion del TOKEN
+    const token = req.header('x-token');
+    // desestructuramos id del usuario que esta creando el POST
+    const { id } = jwt.verify( token, process.env.JWT_SEED);
+    // Obtenemos la informacion del body
+    const { texto, img } = req.body;
+    // Creamos el posteo
+    const posteo = new Posteo({ _idUsuario: id, texto, img });
+    // Guardar el POSTEO en la BD
+    await posteo.save();
     // RESPUESTA
-    res.json({
-        msg: 'CREAR POSTEO'
-    });
+    res.json( posteo );
 }
 // PUT - ACTUALIZAR UNA PUBLICACION * Verificar si es necesario este endpoint
 const posteosPut = async (req, res) => {
