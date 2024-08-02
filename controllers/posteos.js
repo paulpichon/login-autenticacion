@@ -3,6 +3,9 @@
 const Posteo = require("../models/posteo");
 // jsonwebtoken
 const jwt = require("jsonwebtoken")
+// Subir archivos 
+const { subirArchivo } = require("../helpers/subir-archivo");
+
 
 //GET - Mostrar todos los posteos de todos los usuarios
 const posteosGet = (req, res) => {
@@ -36,6 +39,28 @@ const posteosPost = async (req, res) => {
     const { texto, img } = req.body;
     // Creamos el posteo
     const posteo = new Posteo({ _idUsuario: id, texto, img });
+
+    // SUBIR IMAGEN
+    if (req.files && req.files.img) {
+        try {
+            if ( !Array.isArray( req.files.img ) ) {
+                const archivos = [req.files.img];
+                // console.log( archivos, 'archivos mandados' );
+                // con .at(0) decimos que solo tomen en cuenta un archivos aunque se suban mas
+                const archivo = archivos.at(0);
+                // archivo = imagen cargada
+                // undefined = extensiones validas, en este caso no se manda nada ya que por defecto estan jpeg, jpg, png
+                // imagen-perfil-usuarios = el nombre de la carpeta/directorio donde se van a subir las imagenes de perfil
+                const nombre = await subirArchivo( archivo, undefined, 'posteos_usuarios' );
+                // asignamos a resto.img el nombre del archivo
+                posteo.img = nombre;
+            }
+        } catch (msg) {
+            // console.log(msg);
+            return res.status(400).json({ msg });
+        }
+    }
+
     // Guardar el POSTEO en la BD
     await posteo.save();
     // RESPUESTA

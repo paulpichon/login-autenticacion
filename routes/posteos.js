@@ -12,6 +12,8 @@ const { posteosGet,
 const { validarJWT } = require('../middlewares/validar-jwt');
 // Validar Campos
 const { validarCampos } = require('../middlewares/validar-campos');
+// express validation
+const { check } = require('express-validator');
 
 
 // const router
@@ -27,6 +29,11 @@ router.get('/usuario/:idUsuario', posteosUsuarioGet);
 router.post('/', [
         // validar que el token venga y sea valido
         validarJWT,
+        // Validar que el texto no este vacio
+        // Se limpian los espacios en blanco
+        check('texto', 'El campo texto no puede estar vacio').trim().notEmpty(),
+        // Validar que el campo imagen no este vacio
+        // check('img', 'El campo img no puede estar vacio').trim().notEmpty(), 
         // Validar los campos
         validarCampos
 ], posteosPost);
