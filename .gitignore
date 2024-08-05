@@ -3,3 +3,5 @@ node_modules/
 # uploads
 # no subir nada de la carpeta imagen-perfil-usuarios ---> carpeta donde se guarda las imagenes de perfil de los usuarios
 uploads/imagen-perfil-usuarios/**.*
+
+uploads/galeria_usuarios/**.*
