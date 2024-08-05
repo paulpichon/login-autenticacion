@@ -22,5 +22,12 @@ const PosteosSchema = Schema({
     }
 
 });
+// 
+PosteosSchema.methods.toJSON = function() {
+    // destructuring
+    const { __v, ...posteo } = this.toObject();
+    // regresar los demas valores de posteo
+    return posteo;
+}
 // export
 module.exports = model('Posteo', PosteosSchema);
