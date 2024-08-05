@@ -11,8 +11,6 @@ const validarCorreoUsuario  = require('./validar-correo-usuario');
 const ValidarIdUsario       = require('./validar-id-usuario');
 // validarJwt
 const validarJwt            = require('./validar-jwt');
-// validarImgPosteo
-const validarImgPosteo = require('./validar-img-posteo');
 // exports
 // se pone el spread operator para esparcir todo su contenido
 module.exports = {
@@ -21,6 +19,5 @@ module.exports = {
     ...subirArchivos,
     ...validarCorreoUsuario,
     ...ValidarIdUsario,
-    ...validarJwt,
-    ...validarImgPosteo
+    ...validarJwt
 }

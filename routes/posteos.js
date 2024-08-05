@@ -1,5 +1,7 @@
 // Router Express
 const { Router } = require('express');
+// express validation
+const { check } = require('express-validator');
 // Controllers
 const { posteosGet, 
         posteoGet, 
@@ -12,10 +14,8 @@ const { posteosGet,
 const { validarJWT } = require('../middlewares/validar-jwt');
 // Validar Campos
 const { validarCampos } = require('../middlewares/validar-campos');
-// express validation
-const { check } = require('express-validator');
-
-
+// Validar img de posteo
+const { validarImgPosteo } = require('../middlewares/validar-imagen-posteo');
 // const router
 const router = Router();
 
@@ -33,7 +33,8 @@ router.post('/', [
         // Se limpian los espacios en blanco
         check('texto', 'El campo texto no puede estar vacio').trim().notEmpty(),
         // Validar que el campo imagen no este vacio
-        // check('img', 'El campo img no puede estar vacio').trim().notEmpty(), 
+        validarImgPosteo,
+        // check('img').custom(  ), 
         // Validar los campos
         validarCampos
 ], posteosPost);
