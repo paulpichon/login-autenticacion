@@ -7,7 +7,10 @@ const { redimensionarImagen } = require('./redimension-imagenes');
 // como argumentos podemos recibir files 
 // como segundo argumento ponemos las extensiones validas, de esta forma podriamos llamar la funcion subirArchivo y cambiar las extensiones si es que asi lo queremos por ejemplo si queremos validar archivos de texto .txt .pdf. etc etc
 // carpeta: la carpeta es donde se guardara el archivo subido
-const subirArchivo = ( files, extensionesValidas = ['png', 'jpg', 'jpeg'], carpeta = '' ) => {
+// newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
+// https://sharp.pixelplumbing.com/api-resize
+// Se manda las dimensiones de la imagen ya que hay otra funcion para la imagen de perfil que usa otras medidas de imagen
+const subirArchivo = ( files, extensionesValidas = ['png', 'jpg', 'jpeg'], carpeta = '', newWidth, newHeight) => {
     return new Promise((resolve, reject ) => {
         // VALIDAR LA EXTENSION DEL ARCHIVO
         // esto nos crea un array/arreglo
@@ -34,7 +37,7 @@ const subirArchivo = ( files, extensionesValidas = ['png', 'jpg', 'jpeg'], carpe
         // newWidth = el nuevo ancho
         // newHeight = el nuevo alto
         // uploadPath = el nombre de la ruta donde se guardara
-        redimensionarImagen( files, 200, 200, uploadPath);
+        redimensionarImagen( files, newWidth, newHeight, uploadPath);
         // usar el metodo mv() para cambiar el archivo a cualquier parte de nuestro servidor
         files.mv(uploadPath, (err) => {
             // si hay algun error
