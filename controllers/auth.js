@@ -73,7 +73,8 @@ const login = async ( req, res ) => {
         // crear el TOKEN de acceso
         // con 15 minutos para expirar
         // mandamos el id del usuario como un objeto y el tiempo de expiracion del token como segundo argumento
-        const token = await crearJWT( {id: usuario.id }, 90000);
+        // se pone uid ya que al desestructurar el token para validarlo se espera uid
+        const token = await crearJWT( { uid: usuario.id }, 90000);
         // actualizar intentos_login a 0 ya que paso los filtros
         // actualizar la BD
         await Usuario.findByIdAndUpdate(usuario.id, { intentos_login: 0 }, {});
