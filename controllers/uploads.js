@@ -80,7 +80,10 @@ const actualizarImagen = async ( req, res = response) => {
             const archivo = archivos.at(0);
             // console.log( archivo, 'archivo prueba' );
             // nombre = await subirArchivo( archivo, undefined, coleccion );
-            nombre = await subirArchivo( archivo, undefined, 'imagen-perfil-usuarios' );
+            // newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
+            // https://sharp.pixelplumbing.com/api-resize
+            // Se manda las dimensiones de la imagen ya que hay otra funcion para la imagen de perfil que usa otras medidas de imagen
+            nombre = await subirArchivo( archivo, undefined, 'imagen-perfil-usuarios', newWidth = 200, newHeight = 200 );
             // respuesta
         }
         // asignamos el nombre del archivo al modelo.imagen_perfil   
