@@ -21,7 +21,8 @@ const cargarArchivos = async ( req, res ) => {
         // mandar diferentes extensiones, se podria crear un arreglo con diferentes extensiones y mandarlo como argumento
         // const nombre = await subirArchivo( req.files, ['txt', 'md'], 'textos' );
         // en caso de que no mandemos algun argumento DEBEMOS poner UNDEFINED
-        const nombre = await subirArchivo( req.files, undefined, 'imgs' );
+        // newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
+        const nombre = await subirArchivo( req.files, undefined, 'imgs', newWidth = undefined, newWidth = undefined );
         // respuesta
         res.json({ nombre });
 
