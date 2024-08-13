@@ -50,7 +50,10 @@ const posteosPost = async (req, res) => {
             // archivo = imagen cargada
             // undefined = extensiones validas, en este caso no se manda nada ya que por defecto estan jpeg, jpg, png
             // imagen-perfil-usuarios = el nombre de la carpeta/directorio donde se van a subir las imagenes de perfil
-            const nombre = await subirArchivo( archivo, undefined, 'galeria_usuarios' );
+            // newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
+            // https://sharp.pixelplumbing.com/api-resize
+            // Se manda las dimensiones de la imagen ya que hay otra funcion para la imagen de perfil que usa otras medidas de imagen
+            const nombre = await subirArchivo( archivo, undefined, 'galeria_usuarios', newWidth = undefined, newWidth = undefined);
             // asignamos a resto.img el nombre del archivo
             posteo.img = nombre;
         }
