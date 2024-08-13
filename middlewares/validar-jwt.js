@@ -16,11 +16,11 @@ const validarJWT = async (req, res, next ) => {
     // para mayor seguridad hacemos un try catch para verificar si el TOKEN es valido
     try {
         // funcion para verificar el JWT
-        // desestructuramos id
-        const { id } = jwt.verify( token, process.env.JWT_SEED);
-        //leer el usuario que corresponde al id
-        //traemos al usuario que corresponde al id
-        const usuario = await Usuario.findById( id );
+        // desestructuramos uid
+        const { uid } = jwt.verify( token, process.env.JWT_SEED);
+        //leer el usuario que corresponde al uid
+        //traemos al usuario que corresponde al uid
+        const usuario = await Usuario.findById( uid );
         //si el usuario no existe en la BD
         //esta alerta saldra si el usuario ya no existe fisicamente en la BD
         if ( !usuario ) {
