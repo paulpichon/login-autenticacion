@@ -33,12 +33,12 @@ const posteosUsuarioGet = async ( req, res) => {
 const posteosPost = async (req, res) => {
     // Obtener la informacion del TOKEN
     const token = req.header('x-token');
-    // desestructuramos id del usuario que esta creando el POST
-    const { id } = jwt.verify( token, process.env.JWT_SEED);
+    // desestructuramos uid del usuario que esta creando el POST
+    const { uid } = jwt.verify( token, process.env.JWT_SEED);
     // Obtenemos la informacion del body
     const { texto, img } = req.body;
     // Creamos el posteo
-    const posteo = new Posteo({ _idUsuario: id, texto, img });
+    const posteo = new Posteo({ _idUsuario: uid, texto, img });
 
     // SUBIR IMAGEN
     try {
