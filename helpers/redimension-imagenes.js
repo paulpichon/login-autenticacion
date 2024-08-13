@@ -4,6 +4,7 @@ const sharp = require('sharp');
 
 // como argumentos pasamos el archivo y las dimenciones del archivo, y el uploadPath
 // siempre deben de venir las dimensiones nuevas
+// newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
 const redimensionarImagen = async (files, newWidth, newHeight, uploadPath ) => {
     try {
         // redimensionar la imagen usando sharp
