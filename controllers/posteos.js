@@ -53,9 +53,9 @@ const posteosPost = async (req, res) => {
             // newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
             // https://sharp.pixelplumbing.com/api-resize
             // Se manda las dimensiones de la imagen ya que hay otra funcion para la imagen de perfil que usa otras medidas de imagen
-            const nombre = await subirArchivo( archivo, undefined, 'galeria_usuarios', newWidth = undefined, newWidth = undefined);
+            const nombre = await subirArchivo( archivo, undefined, `posteos_usuarios/${ uid }`, newWidth = undefined, newWidth = undefined);
             // asignamos a resto.img el nombre del archivo
-            posteo.img = nombre;
+            posteo.img = `${ uid }/${ nombre }`;
         }
         
     } catch (msg) {

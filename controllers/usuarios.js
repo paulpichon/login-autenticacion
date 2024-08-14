@@ -125,7 +125,7 @@ const usuariosPut = async (req, res) => {
                 // newWidth y newHeight: How many pixels high the resultant image should be. Use null or undefined to auto-scale the height to match the width.
                 // https://sharp.pixelplumbing.com/api-resize
                 // Se manda las dimensiones de la imagen ya que hay otra funcion para la imagen de perfil que usa otras medidas de imagen
-                const nombre = await subirArchivo( archivo, undefined, 'imagen-perfil-usuarios', newWidth = 200, newHeight = 200 );
+                const nombre = await subirArchivo( archivo, undefined, 'imagen_perfil_usuarios', newWidth = 200, newHeight = 200 );
                 // asignamos a resto.imagen_perfil el nombre del archivo
                 resto.imagen_perfil = nombre;
             }
