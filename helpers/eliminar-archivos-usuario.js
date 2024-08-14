@@ -5,7 +5,9 @@ const path = require('path');
 // filesystem
 const fs   = require('fs');
 // Modelo Usuario
-const Usuario = require("../models/usuario")
+const Usuario = require("../models/usuario");
+// Modelo Posteo
+const Posteo = require('../models/posteo');
 
 // carpeta, imagen, id usuario
 const eliminarArchivosUsuario = async ( id ) => {
@@ -23,6 +25,16 @@ const eliminarArchivosUsuario = async ( id ) => {
             fs.unlinkSync( pathImagen );
         }
     }
+    // construimos la ruta de la carpeta para borrarla con todos sus elementos
+    const rutaCarpeta = path.join(__dirname, `../uploads/posteos_usuarios/${ id }`);
+    // recursive: true = borrar todos los elementos dentro de la carpeta
+    // force: true = forzar su eliminacion
+    fs.rm(rutaCarpeta, { recursive: true, force: true }, (err) => {
+        if (err) {
+            // si hay un erro
+            throw new Error('Error al eliminar la carpeta:', err);
+        } 
+    });
 }
 // exports
 module.exports = {
