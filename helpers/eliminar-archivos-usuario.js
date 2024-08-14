@@ -16,7 +16,7 @@ const eliminarArchivosUsuario = async ( id ) => {
     if ( imagen_perfil !== 'assets/no-image.jpg' ) {
         // si existe hay que borrar la imagen del servidor
         // se construye el path de la imagen a borrar
-        const pathImagen = path.join(__dirname, '../uploads/imagen-perfil-usuarios/',imagen_perfil);
+        const pathImagen = path.join(__dirname, '../uploads/imagen_perfil_usuarios/',imagen_perfil);
         // verificar si existe la imagen fisicamente
         if ( fs.existsSync( pathImagen )) {
             // si existe la imagen, la borramos
