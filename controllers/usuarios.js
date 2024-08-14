@@ -5,6 +5,8 @@ const path = require('path');
 const fs   = require('fs');
 // Modelo Usuario
 const Usuario = require("../models/usuario");
+// Modelo Posteo
+const Posteo = require('../models/posteo');
 // bcryptjs
 const bcryptjs = require('bcryptjs');
 // Crear el JWT
@@ -154,6 +156,15 @@ const usuariosDelete = async (req, res) => {
     // debemos analizar si borramos fisicamente al usuario de la BD o solo actualizamos su estatus en la BD
     // Eliminar los archivos que el usuario ha subido
     await eliminarArchivosUsuario( id );
+    // buscar todas las imagenes de posteos del usuario por su UID
+    const posteos_usuarios = await Posteo.find({_idUsuario: id});
+    // recorremos el arreglo para ir borrando una por una las imagenes
+    await posteos_usuarios.map( async posteo => {
+        // eliminar el registro
+        // Por el momento vamos a eliminarlo fisicamente de las BD
+        // Eliminamos los posteos del usuario mediante la identificacion por id del usuario
+        await Posteo.deleteOne({_idUsuario: id});
+    });
     // Por el momento vamos a eliminarlo fisicamente de las BD
     await Usuario.findByIdAndDelete( id );
     // RESPUESTA
