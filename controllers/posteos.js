@@ -31,7 +31,7 @@ const posteosUsuarioGet = async ( req, res) => {
 }
 // POST - Crear un POSTEO
 const posteosPost = async (req, res) => {
-    // Obtener la informacion del TOKEN
+    // Obtener la informacion del TOKEN, necesitamos el UID que viene en el TOKEN para agregarlo en el _idUsuario del posteo
     const token = req.header('x-token');
     // desestructuramos uid del usuario que esta creando el POST
     const { uid } = jwt.verify( token, process.env.JWT_SEED);
@@ -69,9 +69,18 @@ const posteosPost = async (req, res) => {
 }
 // PUT - ACTUALIZAR UNA PUBLICACION * Verificar si es necesario este endpoint
 const posteosPut = async (req, res) => {
+    // ID del posteo
+    const { id } = req.params;
+    // body
+    const{ texto } = req.body;
+    // buscamos el posteo por el ID
+    // Se actualiza el texto del  posteo y la fecha_actualizacion
+    const posteo = await Posteo.findByIdAndUpdate( id, { texto, fecha_actualizacion: Date.now() }, {
+        new: true
+    });
     // RESPUESTA
     res.json({
-        msg: 'PUT POSTEO'
+        posteo
     });
 }
 // DELETE - BORRAR UNA PUBLICACION
