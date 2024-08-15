@@ -54,6 +54,15 @@ router.put('/:id', [
         validarCampos
 ], posteosPut);
 // Delete -eliminar un posteo
-router.delete('/:id', posteosDelete);
+router.delete('/:id', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // validar mongoid valido
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar el ID del posteo
+        check('id').custom( validarIdPosteo ),
+        // Validar los campos
+        validarCampos
+], posteosDelete);
 // exports
 module.exports = router;
