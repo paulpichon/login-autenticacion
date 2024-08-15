@@ -1,10 +1,16 @@
 // Necesitamos un TOKEN para poder crear un POSTEO
+// Path
+const path = require('path');
+// filesystem
+const fs = require('fs');
 // Modelo Posteo
 const Posteo = require("../models/posteo");
 // jsonwebtoken
 const jwt = require("jsonwebtoken")
 // Subir archivos 
 const { subirArchivo } = require("../helpers/subir-archivo");
+// Funcion para eliminar los archivos del usuario
+// const { eliminarArchivosUsuario } = require("../helpers/eliminar-archivos-usuario");
 
 
 //GET - Mostrar todos los posteos de todos los usuarios
@@ -85,9 +91,30 @@ const posteosPut = async (req, res) => {
 }
 // DELETE - BORRAR UNA PUBLICACION
 const posteosDelete = async (req, res) => {
+    // Obtener el ID del posteo
+    const { id } = req.params;
+    // buscar en la BD la ruta de la imagen
+    const { img } = await Posteo.findById( id );
+    // verificar si existe img en la BD
+    if ( img ) {
+        // si existe hay que borrar la imagen del servidor
+        // se construye el path de la imagen a borrar
+        const pathImagen = path.join(__dirname, '../uploads/posteos_usuarios/', img);
+        // verificar si existe la imagen fisicamente
+        if ( fs.existsSync( pathImagen )) {
+            // si existe la imagen, la borramos
+            fs.unlinkSync( pathImagen );
+        }
+    }
+    // llamar la funcion para borrar el archivo que se subio en POSTEO
+    // Eliminar los archivos que el usuario ha subido
+    // await eliminarArchivosUsuario( id );
+    // buscar el id en la base de datos y borrarlo    
+    const posteo = await Posteo.findByIdAndDelete( id );
     // RESPUESTA
     res.json({
-        msg: 'ELIMINAR POSTEO'
+        msg: 'Posteo Eliminado',
+        posteo
     });
 }
 // exports
