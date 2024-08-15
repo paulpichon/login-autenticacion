@@ -10,12 +10,16 @@ const { posteosGet,
         posteosPut, 
         posteosDelete, 
 } = require('../controllers/posteos');
-// validar el JWT del usuario con sesion iniciada
-const { validarJWT } = require('../middlewares/validar-jwt');
 // Validar Campos
-const { validarCampos } = require('../middlewares/validar-campos');
+// validar el JWT del usuario con sesion iniciada
 // Validar img de posteo
-const { validarImgPosteo } = require('../middlewares/validar-imagen-posteo');
+// validar el id del posteo
+const { validarImgPosteo, 
+        validarJWT, 
+        validarCampos 
+} = require('../middlewares');
+// Validar el id del posteo
+const { validarIdPosteo } = require('../helpers');
 // const router
 const router = Router();
 
@@ -39,7 +43,16 @@ router.post('/', [
         validarCampos
 ], posteosPost);
 // Put - Actualizar un posteo
-router.put('/:id', posteosPut);
+router.put('/:id', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // validar mongoid valido
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar el ID del posteo
+        check('id').custom( validarIdPosteo ),
+        // Validar los campos
+        validarCampos
+], posteosPut);
 // Delete -eliminar un posteo
 router.delete('/:id', posteosDelete);
 // exports

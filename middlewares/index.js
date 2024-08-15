@@ -9,8 +9,6 @@ const validarJWT = require('../middlewares/validar-jwt');
 const validarUrlUsuario = require('../middlewares/validar-url-usuario');
 // validarImgPosteo
 const validarImgPosteo = require('../middlewares/validar-imagen-posteo');
-// validarIdPosteo
-const validarIdPosteo = require('../middlewares/validar-id-posteo');
 // exports
 module.exports = {
     ...validarArchivo,
@@ -18,5 +16,4 @@ module.exports = {
     ...validarJWT,
     ...validarUrlUsuario,
     ...validarImgPosteo,
-    ...validarIdPosteo
 }
