@@ -14,11 +14,34 @@ const { subirArchivo } = require("../helpers/subir-archivo");
 
 
 //GET - Mostrar todos los posteos de todos los usuarios
-const posteosGet = (req, res) => {
+// Este GET es para mostrar al usuario que inicia sesion todos los POSTEOS de todos los usuarios
+//Pero se limita a mostrar 15 POSTEOS
+const posteosGet = async (req, res) => {
     // DE MOMENTO ESTA API NO SE VA A OCUPAR
+    // Parametros de limitacion de posteos
+    const limite = 15;
+    //Mostrando el total(numero) y los posteos de usuarios 
+    const [ total, posteos ] = await Promise.all([
+        // Conteo de posteos
+        Posteo.countDocuments(),
+        // Buscar todos los posteos y traer lo ultimos 15 posteos creados por usuarios
+        Posteo.find()
+        // Limitamos los registros a 15
+        .limit( limite )
+        //Traemos los ULTIMOS registros de esta forma { _id : -1 } puede ser por el ID o por fecha_creacion
+        // Orden descendente
+        // .sort( { _id : -1} ) 
+        // { fecha_creacion : -1}
+        // tanto por _id o por fecha_creacion se puede usar -1
+        .sort( { fecha_creacion : -1} ) 
+        
+    ]);
+    
     // RESPUESTA
     res.json({
-        msg: 'GET POSTEOS'
+        total,
+        mostrando: limite,
+        posteos
     });
 }
 // Get - Mostrar un solo posteo
@@ -107,15 +130,10 @@ const posteosDelete = async (req, res) => {
         }
     }
     // llamar la funcion para borrar el archivo que se subio en POSTEO
-    // Eliminar los archivos que el usuario ha subido
-    // await eliminarArchivosUsuario( id );
     // buscar el id en la base de datos y borrarlo    
     const posteo = await Posteo.findByIdAndDelete( id );
     // RESPUESTA
-    res.json({
-        msg: 'Posteo Eliminado',
-        posteo
-    });
+    res.json( posteo );
 }
 // exports
 module.exports = {

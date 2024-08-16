@@ -24,6 +24,7 @@ const { validarIdPosteo } = require('../helpers');
 const router = Router();
 
 // Get obtener Posteos
+// Obtener los ultimos 15 posteos que se han registrado en la aplicacion
 router.get('/', posteosGet);
 // Get obtener un posteo
 router.get('/post/:id', posteoGet);
