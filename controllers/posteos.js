@@ -46,9 +46,16 @@ const posteosGet = async (req, res) => {
 }
 // Get - Mostrar un solo posteo
 const posteoGet = async ( req, res) => {
+    // Obtener el ID del posts
+    const { id } = req.params;
+    // Buscar el ID del post en la BD
+    const posteo = await Posteo.findById( id )
+    // populate() sirve para mostrar informacion completa en base a la propiedad a la que se haga señalamiento en este caso nos muestra la informacion a partir de _idUsuario
+        .populate( '_idUsuario' )
+        // .populate( '_idUsuario', 'nombre_completo' )
     // RESPUESTA
     res.json({
-        msg: 'GET POSTEO'
+        posteo
     });
 }
 // Get - Mostrar todos los posteos de un solo usuario mediante su ID
