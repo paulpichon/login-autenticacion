@@ -27,10 +27,13 @@ const router = Router();
 // Obtener los ultimos 15 posteos que se han registrado en la aplicacion
 //Debemos revisar si ponemos token para esta API o no es necesaria
 router.get('/', [
-         // validar que el token venga y sea valido
-         validarJWT,
-         // Validar los campos
-         validarCampos
+        // validar que el token venga y sea valido
+        validarJWT,
+        //  validar page y limite ambos deben de ser de tipo numero
+        check('page', 'El parametro PAGE debe ser de tipo numerico').optional().isNumeric(),
+        check('limite', 'El parametro LIMITE debe ser de tipo numerico').optional().isNumeric(),
+        // Validar los campos
+        validarCampos
 ], posteosGet);
 // Get obtener un posteo
 router.get('/post/:id', [
