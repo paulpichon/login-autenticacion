@@ -25,9 +25,24 @@ const router = Router();
 
 // Get obtener Posteos
 // Obtener los ultimos 15 posteos que se han registrado en la aplicacion
-router.get('/', posteosGet);
+//Debemos revisar si ponemos token para esta API o no es necesaria
+router.get('/', [
+         // validar que el token venga y sea valido
+         validarJWT,
+         // Validar los campos
+         validarCampos
+], posteosGet);
 // Get obtener un posteo
-router.get('/post/:id', posteoGet);
+router.get('/post/:id', [
+         // validar que el token venga y sea valido
+         validarJWT,
+         // validar mongoid valido
+         check('id', 'El ID no es valido').isMongoId(),
+         // validar el ID del posteo
+         check('id').custom( validarIdPosteo ),
+         // Validar los campos
+         validarCampos
+], posteoGet);
 // Get posteos de usuario
 router.get('/usuario/:idUsuario', posteosUsuarioGet);
 // Crear un Post
@@ -39,7 +54,6 @@ router.post('/', [
         check('texto', 'El campo texto no puede estar vacio').trim().notEmpty(),
         // Validar que el campo imagen no este vacio
         validarImgPosteo,
-        // check('img').custom(  ), 
         // Validar los campos
         validarCampos
 ], posteosPost);
