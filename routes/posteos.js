@@ -44,6 +44,7 @@ router.get('/post/:id', [
          validarCampos
 ], posteoGet);
 // Get posteos de usuario
+// Obtener todos los posteos de un usuario por ID de usuario
 router.get('/usuario/:idUsuario', posteosUsuarioGet);
 // Crear un Post
 router.post('/', [

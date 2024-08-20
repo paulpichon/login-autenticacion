@@ -17,17 +17,21 @@ const { subirArchivo } = require("../helpers/subir-archivo");
 // Este GET es para mostrar al usuario que inicia sesion todos los POSTEOS de todos los usuarios
 //Pero se limita a mostrar 15 POSTEOS
 const posteosGet = async (req, res) => {
-    // DE MOMENTO ESTA API NO SE VA A OCUPAR
+    // Query paramaeters
+    // Obtenemos la pagina y el limite
     // Parametros de limitacion de posteos
-    const limite = 15;
+    const { page = 1, limite = 15} = req.query;
+    // DE MOMENTO ESTA API NO SE VA A OCUPAR
     //Mostrando el total(numero) y los posteos de usuarios 
-    const [ total, posteos ] = await Promise.all([
+    const [ total_registros, posteos ] = await Promise.all([
         // Conteo de posteos
         Posteo.countDocuments(),
         // Buscar todos los posteos y traer lo ultimos 15 posteos creados por usuarios
         Posteo.find()
+        //se muestra pagina page menos 1 por el limite 
+        .skip( (+page - 1) * +limite )
         // Limitamos los registros a 15
-        .limit( limite )
+        .limit( +limite )
         //Traemos los ULTIMOS registros de esta forma { _id : -1 } puede ser por el ID o por fecha_creacion
         // Orden descendente
         // .sort( { _id : -1} ) 
@@ -36,11 +40,15 @@ const posteosGet = async (req, res) => {
         .sort( { fecha_creacion : -1} ) 
         
     ]);
-    
+
     // RESPUESTA
     res.json({
-        total,
-        mostrando: limite,
+        page,
+        next: `/api/posteos?page=${ (+page + 1)}&limite=${ +limite }`,
+        prev: (+page - 1 ) > 0 ? `/api/posteos?page=${ (+page - 1)}&limite=${ +limite }`: null,
+        limite,
+        total_registros,
+        mostrando: posteos.length,
         posteos
     });
 }
