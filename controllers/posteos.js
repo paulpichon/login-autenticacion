@@ -51,8 +51,9 @@ const posteoGet = async ( req, res) => {
     // Buscar el ID del post en la BD
     const posteo = await Posteo.findById( id )
     // populate() sirve para mostrar informacion completa en base a la propiedad a la que se haga señalamiento en este caso nos muestra la informacion a partir de _idUsuario
-        .populate( '_idUsuario' )
-        // .populate( '_idUsuario', 'nombre_completo' )
+        // .populate( '_idUsuario' )
+        // traemos infORMACION solo la necesaria: 'nombre_completo imagen_perfil url'
+        .populate( '_idUsuario', 'nombre_completo imagen_perfil url' )
     // RESPUESTA
     res.json({
         posteo
