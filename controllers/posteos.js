@@ -95,23 +95,14 @@ const posteosUsuarioGet = async ( req, res) => {
         .limit( parseInt(limite) )
         
     ]);
-
-    // buscar todos los posteos del usuario por su ID
-    // { _idUsuario: idUsuario } : _idUsuario ---> collecion Posteos
-    // const posteos = await Posteo.find({ _idUsuario: idUsuario })
-    //      //Traemos los ULTIMOS registros de esta forma { _id : -1 } puede ser por el ID o por fecha_creacion
-    //     // Orden descendente
-    //     // .sort( { _idUsuario : -1} ) 
-    //     // { fecha_creacion : -1}
-    //     // tanto por _idUsuario o por fecha_creacion se puede usar -1
-    //     .sort( { fecha_creacion: -1} ) 
-    //     //se muestra pagina page menos 1 por el limite 
-    //     .skip( (+page - 1) * +limite )
-    //     // Limitamos los registros a 15
-    //     .limit( parseInt(limite) )
     // RESPUESTA
     res.json({
+        page,
+        next: `/api/posteos/usuario/${ idUsuario }?page=${ (+page + 1)}&limite=${ +limite }`,
+        prev: (+page - 1 ) > 0 ? `/api/posteos/usuario/${ idUsuario }?page=${ (+page - 1)}&limite=${ +limite }`: null,
+        limite,
         total_registros,
+        mostrando: posteos.length,
         posteos
     });
 }
