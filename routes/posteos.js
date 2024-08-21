@@ -19,7 +19,10 @@ const { validarImgPosteo,
         validarCampos 
 } = require('../middlewares');
 // Validar el id del posteo
-const { validarIdPosteo } = require('../helpers');
+// Validar el id del usuario
+const { validarIdPosteo, 
+        validarIdUsuario 
+} = require('../helpers');
 // const router
 const router = Router();
 
@@ -48,7 +51,19 @@ router.get('/post/:id', [
 ], posteoGet);
 // Get posteos de usuario
 // Obtener todos los posteos de un usuario por ID de usuario
-router.get('/usuario/:idUsuario', posteosUsuarioGet);
+router.get('/usuario/:idUsuario', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // validar mongoid valido
+        check('idUsuario', 'El ID no es valido').isMongoId(),
+        // validar el ID del usuario
+        check('idUsuario').custom( validarIdUsuario ),
+        // validar page y limite ambos deben de ser de tipo numero
+        check('page', 'El parametro PAGE debe ser de tipo numerico').optional().isNumeric(),
+        check('limite', 'El parametro LIMITE debe ser de tipo numerico').optional().isNumeric(),
+        // Validar los campos
+        validarCampos
+], posteosUsuarioGet);
 // Crear un Post
 router.post('/', [
         // validar que el token venga y sea valido
