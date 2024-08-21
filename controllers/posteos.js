@@ -69,9 +69,50 @@ const posteoGet = async ( req, res) => {
 }
 // Get - Mostrar todos los posteos de un solo usuario mediante su ID
 const posteosUsuarioGet = async ( req, res) => {
+    // obtener el ID del usuario
+    const { idUsuario } = req.params;
+    // Query con la que hacemos el filtro
+    const filtroIdUsuario = { _idUsuario: idUsuario };
+    // Query paramaeters
+    // Obtenemos la pagina y el limite
+    // Parametros de limitacion de posteos
+    const { page = 1, limite = 15} = req.query;
+    // Hacer la consulta con Promise.all
+    const [ total_registros, posteos ] = await Promise.all([
+        // Conteo de posteos
+        Posteo.countDocuments( filtroIdUsuario ),
+        // buscar los documentos en la BD
+        Posteo.find( filtroIdUsuario )
+         //Traemos los ULTIMOS registros de esta forma { _id : -1 } puede ser por el ID o por fecha_creacion
+        // Orden descendente
+        // .sort( { _idUsuario : -1} ) 
+        // { fecha_creacion : -1}
+        // tanto por _idUsuario o por fecha_creacion se puede usar -1
+        .sort( { fecha_creacion: -1} ) 
+        //se muestra pagina page menos 1 por el limite 
+        .skip( (+page - 1) * +limite )
+        // Limitamos los registros a 15
+        .limit( parseInt(limite) )
+        
+    ]);
+
+    // buscar todos los posteos del usuario por su ID
+    // { _idUsuario: idUsuario } : _idUsuario ---> collecion Posteos
+    // const posteos = await Posteo.find({ _idUsuario: idUsuario })
+    //      //Traemos los ULTIMOS registros de esta forma { _id : -1 } puede ser por el ID o por fecha_creacion
+    //     // Orden descendente
+    //     // .sort( { _idUsuario : -1} ) 
+    //     // { fecha_creacion : -1}
+    //     // tanto por _idUsuario o por fecha_creacion se puede usar -1
+    //     .sort( { fecha_creacion: -1} ) 
+    //     //se muestra pagina page menos 1 por el limite 
+    //     .skip( (+page - 1) * +limite )
+    //     // Limitamos los registros a 15
+    //     .limit( parseInt(limite) )
     // RESPUESTA
     res.json({
-        msg: 'GET POSTEOS POR ID DE USUARIO'
+        total_registros,
+        posteos
     });
 }
 // POST - Crear un POSTEO
