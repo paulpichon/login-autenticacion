@@ -23,6 +23,8 @@ const { validarImgPosteo,
 const { validarIdPosteo, 
         validarIdUsuario 
 } = require('../helpers');
+// Likes posteos
+const { putLikePosteo } = require('../controllers/likes');
 // const router
 const router = Router();
 
@@ -98,5 +100,8 @@ router.delete('/:id', [
         // Validar los campos
         validarCampos
 ], posteosDelete);
+// PUT: Dar like a una publicación
+// /posteos/id de publicacion/like
+router.put('/:id/like', putLikePosteo );
 // exports
 module.exports = router;
