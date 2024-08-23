@@ -218,6 +218,22 @@ const putLikePosteo = async (req, res) => {
         res.status(400).json({ msg: 'Hubo un error al generar el LIKE, contactar a soporte.'});
     }
 }
+// 
+const getLikesPosteos = async (req, res) => {
+    try {
+        // obtener ID de publicacion
+        const { id } = req.params;
+        const conteoLikesPosteo = await Like.countDocuments({ _idPosteo: id });
+        res.json({ 
+            likes: conteoLikesPosteo,
+            posteo: id
+        });
+    } catch (err) {
+        res.status(400).json({
+            msg: 'Error al obtener el número de likes, contactar a soporte'
+        });
+    }
+}
 // exports
 module.exports = {
     posteosGet,
@@ -226,5 +242,6 @@ module.exports = {
     posteosPost,
     posteosPut,
     posteosDelete,
-    putLikePosteo
+    putLikePosteo,
+    getLikesPosteos
 }

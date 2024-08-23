@@ -9,7 +9,8 @@ const { posteosGet,
         posteosPost, 
         posteosPut, 
         posteosDelete,
-        putLikePosteo, 
+        putLikePosteo,
+        getLikesPosteos, 
 } = require('../controllers/posteos');
 // Validar Campos
 // validar el JWT del usuario con sesion iniciada
@@ -111,5 +112,8 @@ router.put('/:id/like', [
         // Validar los campos
         validarCampos
 ], putLikePosteo );
+// Obtener el número de likes de una publicación
+router.get('/:id/likes', getLikesPosteos );
+
 // exports
 module.exports = router;
