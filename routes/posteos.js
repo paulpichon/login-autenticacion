@@ -126,7 +126,16 @@ router.get('/:id/likes', [
 ], getLikesPosteos );
 // Obtener los usuarios que dieron like a una publicación
 // Get: /id de la publicacion/likes/usuarios
-router.get('/:id/likes/usuarios', getLikesUsuariosPosteos );
+router.get('/:id/likes/usuarios', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // validar mongoid valido
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar el ID del posteo
+        check('id').custom( validarIdPosteo ),
+        // Validar los campos
+        validarCampos
+], getLikesUsuariosPosteos );
 
 // exports
 module.exports = router;

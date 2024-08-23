@@ -263,7 +263,9 @@ const getLikesUsuariosPosteos = async (req, res) => {
         const likes = await Like.find({ _idPosteo: id })
             .populate('_idUsuario', 'nombre_completo imagen_perfil');
         // Respuesta
-        res.json(likes);
+        res.json({
+            likes_usuarios_posteo: likes
+        });
     } catch (err) {
         res.status(400).send('Hubo un error al obtener los usuarios que dieron like, favor de contactar a soporte');
     }
