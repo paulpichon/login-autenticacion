@@ -3,10 +3,12 @@
 const path = require('path');
 // filesystem
 const fs = require('fs');
-// Modelo Posteo
-const Posteo = require("../models/posteo");
 // jsonwebtoken
 const jwt = require("jsonwebtoken")
+// Modelo Posteo
+const Posteo = require("../models/posteo");
+// Modelo Like
+const Like = require("../models/like");
 // Subir archivos 
 const { subirArchivo } = require("../helpers/subir-archivo");
 // Funcion para eliminar los archivos del usuario
@@ -183,6 +185,39 @@ const posteosDelete = async (req, res) => {
     // RESPUESTA
     res.json( posteo );
 }
+// Funcion para dar LIKES a POSTEOS
+const putLikePosteo = async (req, res) => { 
+    try {
+        // Obtener Id de publicacion
+        const { id } = req.params;
+        // Buscamos el posteo por su ID de publicacion
+        const posteo = await Posteo.findById( id );
+        // Obtener la informacion del TOKEN, necesitamos el UID que viene en el TOKEN para agregarlo en el _idUsuario del posteo
+        const token = req.header('x-token');
+        // desestructuramos uid del usuario que esta creando el POST
+        const { uid } = jwt.verify( token, process.env.JWT_SEED);
+        if (!posteo) return res.status(404).json({ msg: 'Posteo no encontrada'});
+        // Buscar si ya se le dio like a la publicacion
+        const existingLike = await Like.findOne({ _idUsuario: uid, _idPosteo: id });
+        // En caso de que ya se le haya dado LIKE a la publicacion
+        if (existingLike) {
+            // Si ya dio like, elimina el like
+            await Like.findByIdAndDelete(existingLike._id);
+            return res.json({ msg: 'Like eliminado' });
+        } else {
+            // Si no ha dado like, añade uno nuevo
+            const like = new Like({ _idUsuario: uid, _idPosteo: id });
+            // Se guarda el LIKE
+            await like.save();
+            // Retornamos el mensaje
+            return res.json({ 
+                msg: 'Like añadido' 
+            });
+        }
+    } catch (err) {
+        res.status(400).json({ msg: 'Hubo un error al generar el LIKE, contactar a soporte.'});
+    }
+}
 // exports
 module.exports = {
     posteosGet,
@@ -190,5 +225,6 @@ module.exports = {
     posteosUsuarioGet,
     posteosPost,
     posteosPut,
-    posteosDelete
+    posteosDelete,
+    putLikePosteo
 }

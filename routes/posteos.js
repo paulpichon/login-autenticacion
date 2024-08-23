@@ -8,7 +8,8 @@ const { posteosGet,
         posteosUsuarioGet,
         posteosPost, 
         posteosPut, 
-        posteosDelete, 
+        posteosDelete,
+        putLikePosteo, 
 } = require('../controllers/posteos');
 // Validar Campos
 // validar el JWT del usuario con sesion iniciada
@@ -23,8 +24,6 @@ const { validarImgPosteo,
 const { validarIdPosteo, 
         validarIdUsuario 
 } = require('../helpers');
-// Likes posteos
-const { putLikePosteo } = require('../controllers/likes');
 // const router
 const router = Router();
 
