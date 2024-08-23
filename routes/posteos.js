@@ -113,7 +113,16 @@ router.put('/:id/like', [
         validarCampos
 ], putLikePosteo );
 // Obtener el número de likes de una publicación
-router.get('/:id/likes', getLikesPosteos );
+router.get('/:id/likes', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // validar mongoid valido
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar el ID del posteo
+        check('id').custom( validarIdPosteo ),
+        // Validar los campos
+        validarCampos
+], getLikesPosteos );
 
 // exports
 module.exports = router;
