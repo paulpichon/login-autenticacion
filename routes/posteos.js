@@ -102,6 +102,15 @@ router.delete('/:id', [
 ], posteosDelete);
 // PUT: Dar like a una publicación
 // /posteos/id de publicacion/like
-router.put('/:id/like', putLikePosteo );
+router.put('/:id/like', [
+        // validar que el token venga y sea valido
+        validarJWT,
+        // validar mongoid valido
+        check('id', 'El ID no es valido').isMongoId(),
+        // validar el ID del posteo
+        check('id').custom( validarIdPosteo ),
+        // Validar los campos
+        validarCampos
+], putLikePosteo );
 // exports
 module.exports = router;
