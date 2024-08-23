@@ -32,8 +32,7 @@ const putLikePosteo = async (req, res) => {
             await like.save();
             // Retornamos el mensaje
             return res.json({ 
-                msg: 'Like añadido',
-                posteo 
+                msg: 'Like añadido' 
             });
         }
     } catch (err) {
