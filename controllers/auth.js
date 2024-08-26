@@ -185,8 +185,8 @@ const googleSignIn = async( req, res) => {
 
         // Generar el JWT
         // const token = await crearJWT( usuario.id );
-        const token = await crearJWT( {id: usuario.id }, 90000 );
-
+        // Ponemos el UID del usuario para poder generar el payload, y aunque no es necesario ponemos el correo del usuario para de igual forma generar el PAYLOAD de esta forma podemos verificar de buena forma si problemas el token, y que no nos genere algun error 
+        const token = await crearJWT( {uid: usuario.id, correo: usuario.correo }, 90000 );
         // respuesta
         res.json({
             usuario,
