@@ -7,6 +7,8 @@ const fs   = require('fs');
 const Usuario = require("../models/usuario");
 // Modelo Posteo
 const Posteo = require('../models/posteo');
+// Modelo Likes
+const Like = require('../models/like');
 // bcryptjs
 const bcryptjs = require('bcryptjs');
 // Crear el JWT
@@ -19,6 +21,7 @@ const { subirArchivo } = require('../helpers/subir-archivo');
 const { crearUrlUsuarioPerfil } = require('../helpers/crear-url-usuario');
 // Funcion para eliminar los archivos del usuario
 const { eliminarArchivosUsuario } = require('../helpers/eliminar-archivos-usuario');
+
 
 //GET - Mostrar todos los usuarios
 const usuariosGet = (req, res) => {
@@ -160,10 +163,14 @@ const usuariosDelete = async (req, res) => {
     const posteos_usuarios = await Posteo.find({_idUsuario: id});
     // recorremos el arreglo para ir borrando una por una las imagenes
     await posteos_usuarios.map( async posteo => {
-        // eliminar el registro
-        // Por el momento vamos a eliminarlo fisicamente de las BD
-        // Eliminamos los posteos del usuario mediante la identificacion por id del usuario
-        await Posteo.deleteOne({_idUsuario: id});
+        await Promise.all([
+            // eliminar el registro
+            // Por el momento vamos a eliminarlo fisicamente de las BD
+            // Eliminamos los posteos del usuario mediante la identificacion por id del usuario
+             Posteo.deleteOne({_idUsuario: id}),
+            // Eliminamos los Likes del usuario mediante la identificacion por id del usuario
+             Like.deleteOne({_idUsuario: id})
+        ]);
     });
     // Por el momento vamos a eliminarlo fisicamente de las BD
     await Usuario.findByIdAndDelete( id );
