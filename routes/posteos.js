@@ -76,6 +76,8 @@ router.post('/', [
         check('texto', 'El campo texto no puede estar vacio').trim().notEmpty(),
         // Validar que el campo imagen no este vacio
         validarImgPosteo,
+        // validar que el campo posteo_publico sea Boolean
+        check('posteo_publico', 'El campo posteo_publico debe ser de tipo Boolean').optional().isBoolean(),
         // Validar los campos
         validarCampos
 ], posteosPost);
