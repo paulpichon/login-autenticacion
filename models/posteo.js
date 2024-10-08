@@ -19,6 +19,11 @@ const PosteosSchema = Schema({
         type: String,
         required: [ true, 'La imagen es obligatoria']
     },
+    // Esta campo es para determinar si la imagen/posteo sera publico una vez entras a la plataforma, o sera privado, es decir que tendras que seguir a estar persona para poder ver sus imagenes que ha subido en su cuenta
+    posteo_publico: {
+        type: Boolean,
+        default: true
+    },
     // Fecha de creacion del POSTEO
     fecha_creacion: {
         type: Date,
