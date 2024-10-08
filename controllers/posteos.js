@@ -30,7 +30,8 @@ const posteosGet = async (req, res) => {
             // Conteo de posteos
             Posteo.countDocuments(),
             // Buscar todos los posteos y traer lo ultimos 15 posteos creados por usuarios
-            Posteo.find()
+            // Pero que ademas los posteos sean publicos {posteo_publico: true}
+            Posteo.find({posteo_publico: true})
             //se muestra pagina page menos 1 por el limite 
             .skip( (+page - 1) * +limite )
             // Limitamos los registros a 15
