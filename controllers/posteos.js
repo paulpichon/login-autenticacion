@@ -127,9 +127,10 @@ const posteosPost = async (req, res) => {
     // desestructuramos uid del usuario que esta creando el POST
     const { uid } = jwt.verify( token, process.env.JWT_SEED);
     // Obtenemos la informacion del body
-    const { texto, img } = req.body;
+    const { texto, img, posteo_publico } = req.body;
     // Creamos el posteo
-    const posteo = new Posteo({ _idUsuario: uid, texto, img });
+    // se agrega posteo_publico para verificar si el usuario quiere que se muestre en la pantalla principal o se muestre solo en su perfil junto con todas sus imagenes
+    const posteo = new Posteo({ _idUsuario: uid, texto, img, posteo_publico });
 
     // SUBIR IMAGEN
     try {
